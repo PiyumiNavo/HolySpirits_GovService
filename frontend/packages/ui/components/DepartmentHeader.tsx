@@ -114,24 +114,35 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface HeaderProps {
   departmentName: string;
 }
 
+const navItems = [
+  { path: '/', name: 'Home' },
+  { path: '/services', name: 'Services' },
+  { path: '/branches', name: 'Branches' }
+];
+
 export default function DepartmentHeader({ departmentName }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const isActive = (path: string) => pathname === path;
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-primary-600 bg-primary-600 backdrop-blur-lg">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-4">
+      <div className="relative container mx-auto flex h-16 items-center justify-between px-4 sm:px-4">
         {/* Left - Logo */}
         <div className="flex items-center gap-2">
-          <a href="/" className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2">
             <svg
               className="h-4 w-4 text-primary-500"
               viewBox="0 0 24 24"
@@ -160,40 +171,33 @@ export default function DepartmentHeader({ departmentName }: HeaderProps) {
                 strokeLinejoin="round"
               />
             </svg>
-          </a>
-          <a
-            href="#"
-            className="text-sm font-medium text-primary-500 hover:text-primary-500 transition-colors"
+          </Link>
+          <Link
+            href="/"
+            className="text-sm font-medium text-white hover:text-primary-500 transition-colors max-w-[300px]"
           >
             {departmentName}
-          </a>
+          </Link>
         </div>
 
         {/* Center - Navigation (Desktop) */}
-        <nav className="hidden md:flex items-center space-x-8">
-          <a
-            href="#"
-            className="text-sm font-medium text-primary-500 hover:text-primary-500 transition-colors"
-          >
-            Home
-          </a>
-          <a
-            href="#"
-            className="text-sm font-medium text-primary-500 hover:text-primary-500 transition-colors"
-          >
-            Services
-          </a>
-          <a
-            href="#"
-            className="text-sm font-medium text-primary-500 hover:text-primary-500 transition-colors"
-          >
-            Branches
-          </a>
+        <nav className="hidden md:flex absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 items-center space-x-8">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              href={item.path}
+              className={`text-sm font-medium ${
+              isActive(item.path) ? 'text-primary-500 underline' : 'text-white'
+            } hover:text-primary-500 transition-colors`}
+            >
+              {item.name}
+            </Link>
+          ))}
         </nav>
 
         {/* Right - Icons */}
         <div className="flex items-center space-x-4">
-          <button className="p-2 rounded-full text-primary-500 hover:bg-primary-500 hover:text-primary-600 transition-colors">
+          <button className="p-2 rounded-full text-white hover:bg-primary-500 hover:text-primary-600 transition-colors">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -209,7 +213,7 @@ export default function DepartmentHeader({ departmentName }: HeaderProps) {
               />
             </svg>
           </button>
-          <button className="p-2 rounded-full text-primary-500 hover:bg-primary-500 hover:text-primary-600 transition-colors">
+          <button className="p-2 rounded-full text-white hover:bg-primary-500 hover:text-primary-600 transition-colors">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -252,28 +256,19 @@ export default function DepartmentHeader({ departmentName }: HeaderProps) {
 
       {/* Mobile Menu */}
       <div className={`md:hidden bg-primary-600 transition-all duration-300 overflow-hidden ${isMenuOpen ? 'max-h-96' : 'max-h-0'}`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <a
-            href="#"
-            className="block px-3 py-2 text-base font-medium text-primary-500 hover:bg-primary-700 hover:text-white"
-            onClick={toggleMenu}
-          >
-            Home
-          </a>
-          <a
-            href="#"
-            className="block px-3 py-2 text-base font-medium text-primary-500 hover:bg-primary-700 hover:text-white"
-            onClick={toggleMenu}
-          >
-            Services
-          </a>
-          <a
-            href="#"
-            className="block px-3 py-2 text-base font-medium text-primary-500 hover:bg-primary-700 hover:text-white"
-            onClick={toggleMenu}
-          >
-            Branches
-          </a>
+        <div className="flex flex-col px-2 p-4 space-y-4 sm:px-3">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              href={item.path}className={`text-sm font-medium ${
+              isActive(item.path) ? 'text-primary-500 underline' : 'text-white'
+            } hover:text-primary-500 transition-colors`}
+              onClick={toggleMenu}
+            >
+              {item.name}
+            </Link>
+          ))}
+          
         </div>
       </div>
     </header>
