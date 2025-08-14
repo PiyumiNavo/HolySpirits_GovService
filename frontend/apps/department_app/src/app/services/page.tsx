@@ -196,6 +196,7 @@ export default function Services() {
                     <p className="text-text-700">No items found matching "{searchQuery}"</p>
                 </div>
             )}
+            <Button>Add New Service</Button>
 
         </main>
         
