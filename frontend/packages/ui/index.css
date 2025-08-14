@@ -1,0 +1,74 @@
+
+
+@theme {
+  --color-initial: *;
+  --color-primary-500: oklch(0.5575 0.2525 302.32);
+  --color-primary-400: oklch(0.70 0.2525 302.32);
+  --color-primary-600: oklch(0.45 0.3144 302.32);
+  --color-primary-hover: oklab(77.359% 0.02701 -0.1015);
+  --color-secondary-500: oklch(0.9 0.2 85);
+  --color-secondary-400: oklch(0.95 0.15 85);
+  --color-secondary-600: oklch(0.85 0.25 85);
+  --color-background-50: oklch(0.98 0.005 240);
+  --color-text-700: oklch(0.35 0.01 240);
+  --color-text-500: oklch(0.6 0.01 240);
+  --color-text-900: oklch(0.2 0.01 240);
+  --color-text-white: oklch(1 0 0);
+  --color-border-200: oklch(0.9 0.01 240);
+  --color-shadow: oklch(0 0 0 / 0.1);
+
+  --color-success-500: oklch(0.6 0.2 160);
+  --color-success-100: oklch(0.9 0.05 160);
+  --color-warning-500: oklch(0.7 0.2 85);
+  --color-warning-100: oklch(0.95 0.05 85);
+  --color-error-500: oklch(0.65 0.25 25);
+  --color-error-100: oklch(0.95 0.05 25);
+  --color-pending-500: oklch(0.75 0.2 85);
+  --color-pending-100: oklch(0.95 0.05 85);
+  --color-approved-500: oklch(0.6 0.2 160);
+  --color-approved-100: oklch(0.9 0.05 160);
+  --color-suspended-500: oklch(0.65 0.2 50);
+  --color-suspended-100: oklch(0.9 0.05 50);
+  --color-revoked-500: oklch(0.65 0.25 25);
+  --color-revoked-100: oklch(0.95 0.05 25);
+  --color-admin-500: oklch(0.65 0.2 280);
+  --color-admin-100: oklch(0.95 0.05 280);
+  
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+}
+
+.dark {
+  --color-primary-500: oklch(0.55 0.2 240);
+  --color-primary-400: oklch(0.65 0.15 240);
+  --color-primary-600: oklch(0.45 0.25 240);
+  --color-secondary-500: oklch(0.85 0.2 85);
+  --color-secondary-400: oklch(0.9 0.15 85);
+  --color-secondary-600: oklch(0.75 0.25 85);
+  --color-background-50: oklch(0.2 0.005 240);
+  --color-text-700: oklch(0.85 0.01 240);
+  --color-text-500: oklch(0.75 0.01 240);
+  --color-text-900: oklch(0.95 0.01 240);
+  --color-text-white: oklch(1 0 0);
+  --color-border-200: oklch(0.4 0.01 240);
+  --color-shadow: oklch(0 0 0 / 0.3);
+  
+  --color-success-500: oklch(0.55 0.2 160);
+  --color-success-100: oklch(0.25 0.05 160);
+  --color-warning-500: oklch(0.65 0.2 85);
+  --color-warning-100: oklch(0.3 0.05 85);
+  --color-error-500: oklch(0.6 0.25 25);
+  --color-error-100: oklch(0.35 0.05 25);
+  --color-pending-500: oklch(0.7 0.2 85);
+  --color-pending-100: oklch(0.3 0.05 85);
+  --color-approved-500: oklch(0.55 0.2 160);
+  --color-approved-100: oklch(0.25 0.05 160);
+  --color-suspended-500: oklch(0.6 0.2 50);
+  --color-suspended-100: oklch(0.35 0.05 50);
+  --color-revoked-500: oklch(0.6 0.25 25);
+  --color-revoked-100: oklch(0.35 0.05 25);
+  --color-admin-500: oklab(77.359% 0.02701 -0.1015);
+  --color-admin-100: oklch(0.3 0.05 280);
+}
+
