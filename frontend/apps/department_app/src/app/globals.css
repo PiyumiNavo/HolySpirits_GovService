@@ -4,8 +4,8 @@
 @source "../../../../packages/ui/**/*.{ts,tsx,js,jsx,html,css}";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F3FCFF;
+  --foreground: #073348;
 }
 
 @theme inline {
@@ -15,10 +15,10 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #F3FCFF;
+    --foreground: #073348;
   }
 }
 
