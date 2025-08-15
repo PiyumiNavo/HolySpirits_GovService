@@ -1,22 +1,35 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 interface BranchCardProps {
+  id: number;
   branchName: string;
   address: string;
   counterCount: number;
-  mainAssignee: string;
   assigneeCount: number;
+  onClick?: (id: number) => void;
 }
 
 export default function BranchCard({
+  id,
   branchName = "Main Branch",
   address = "123 Government St, Colombo",
   counterCount = 5,
-  mainAssignee = "John Doe",
   assigneeCount = 12,
+  onClick,
 }: BranchCardProps) {
+  
+  const handleClick = () => {
+    if (onClick) {
+      onClick(id);
+    }
+  };
+  
   return (
-    <div className="w-full bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div
+      onClick={handleClick}
+      className="w-full bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer">
       {/* Header */}
       <div className="bg-primary-600 p-4">
         <h2 className="text-sm sm:text-base font-semibold text-white">{branchName}</h2>
@@ -56,13 +69,6 @@ export default function BranchCard({
             </svg>
             <span className="font-medium text-sm sm:text-base">{assigneeCount} Assignees</span>
           </div>
-        </div>
-        
-        {/* Main Assignees */}
-        <div className="flex flex-wrap gap-2 mt-4">
-            <span className="bg-primary-500 text-primary-600 text-sm font-medium px-3.5 py-1.5 rounded">
-                Main Assignee: {mainAssignee}
-            </span>
         </div>
       </div>
     </div>
