@@ -1,6 +1,20 @@
-import React from "react";
+"use client"
+import React, { ChangeEventHandler } from "react";
 
-export default function SearchBar({ placeholder = "Search a ministry..." }: { placeholder?: string }) {
+interface SearchBarProps {
+  placeholder?: string;
+  onSearch: (query: string) => void;
+}
+
+export default function SearchBar({ 
+  placeholder = "Search here...",
+  onSearch
+ }: SearchBarProps) {
+
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    onSearch(e.target.value);
+  };
+
   return (
     <div className="relative w-full">
       <div className="flex items-center bg-primary-400 rounded-full text-sm px-4 py-3 hover:bg-gray-200 focus-within:bg-gray-200 transition-colors duration-200">
@@ -23,6 +37,7 @@ export default function SearchBar({ placeholder = "Search a ministry..." }: { pl
         <input
           type="text"
           placeholder={placeholder}
+          onChange={handleChange}
           className="w-full bg-transparent border-none outline-none text-gray-700 placeholder-gray-500 text-sm sm:text-sm"
         />
       </div>

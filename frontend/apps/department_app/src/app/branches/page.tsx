@@ -11,8 +11,8 @@ export default function Services() {
 
         <div className="flex flex-col gap-2 w-100">
           <SearchBar placeholder="Search for services..."></SearchBar>
+          
         </div>
-        <Button>Add New Department</Button>
 
       </main>
       
