@@ -38,8 +38,11 @@ export class AuthService extends BaseService {
   login(user: UserDocument) {
     const payload: UserPayload = {
       email: user.email,
+      name: user.name,
       sub: user._id,
       role: user.role,
+      isVerified: user.isVerified,
+      departmentId: user.departmentId,
     };
 
     return this.success(
@@ -64,8 +67,11 @@ export class AuthService extends BaseService {
   refreshToken(user: UserDocument) {
     const payload: UserPayload = {
       email: user.email,
+      name: user.name,
       sub: user._id,
       role: user.role,
+      isVerified: user.isVerified,
+      departmentId: user.departmentId,
     };
 
     return this.success(
