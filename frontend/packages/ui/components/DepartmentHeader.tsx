@@ -10,6 +10,7 @@ interface HeaderProps {
 
 const navItems = [
   { path: '/', name: 'Home' },
+  { path: '/dashboard', name: 'Dashboard' },
   { path: '/services', name: 'Services' },
   { path: '/branches', name: 'Branches' }
 ];
