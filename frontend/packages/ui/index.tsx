@@ -4,3 +4,4 @@ export { default as DepartmentCard } from "./components/DepartmentCard";
 export { default as SearchBar } from "./components/SearchBar"
 export { default as BlurredDiv } from "./components/BlurredDiv";
 export { InputField, InputFields } from "./components/InputFields";
+export { default as BranchCard } from "./components/BranchCard";
