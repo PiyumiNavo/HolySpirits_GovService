@@ -212,7 +212,11 @@ export default function Services() {
                     <p className="text-text-700">No items found matching "{searchQuery}"</p>
                 </div>
             )}
-            <Button>Add New Service</Button>
+            <Button>
+                <a href="/services/new" className="block w-full">
+                    Add New Service
+                </a>
+            </Button>
 
         </main>
         
