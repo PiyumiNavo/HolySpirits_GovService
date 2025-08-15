@@ -16,7 +16,8 @@ const servicesData = [
         <path d="M12 8V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M8 12H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
-    )
+    ),
+    url: "/../../../public/bicycles.jpg"
     },
     {
     id: 2,
@@ -25,7 +26,8 @@ const servicesData = [
       <svg className="h-4 w-4 text-primary-500" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
-    )
+    ),
+    url: "/../../../public/bicycles.jpg"
     },
     {
     id: 3,
@@ -35,7 +37,8 @@ const servicesData = [
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
         <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="2"/>
       </svg>
-    )
+    ),
+    url: "/../../../public/bicycles.jpg"
     },
     {
     id: 4,
@@ -45,7 +48,8 @@ const servicesData = [
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
         <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="2"/>
       </svg>
-    )
+    ),
+    url: "/../../../public/bicycles.jpg"
     },
     {
     id: 5,
@@ -55,7 +59,8 @@ const servicesData = [
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
         <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="2"/>
       </svg>
-    )
+    ),
+    url: "/../../../public/bicycles.jpg"
     },
     {
     id: 6,
@@ -65,7 +70,8 @@ const servicesData = [
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
         <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="2"/>
       </svg>
-    )
+    ),
+    url: "/../../../public/bicycles.jpg"
     },
     {
     id: 7,
@@ -75,7 +81,8 @@ const servicesData = [
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
         <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="2"/>
       </svg>
-    )
+    ),
+    url: "/../../../public/bicycles.jpg"
     },
     {
     id: 8,
@@ -85,7 +92,8 @@ const servicesData = [
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
         <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="2"/>
       </svg>
-    )
+    ),
+    url: "/../../../public/bicycles.jpg"
     },
     {
     id: 9,
@@ -95,7 +103,8 @@ const servicesData = [
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
         <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="2"/>
       </svg>
-    )
+    ),
+    url: "/../../../public/bicycles.jpg"
     },
     {
     id: 10,
@@ -105,7 +114,8 @@ const servicesData = [
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
         <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="2"/>
       </svg>
-    )
+    ),
+    url: "/../../../public/bicycles.jpg"
     },
     {
     id: 11,
@@ -115,7 +125,8 @@ const servicesData = [
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
         <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="2"/>
       </svg>
-    )
+    ),
+    url: "/../../../public/bicycles.jpg"
     },
     {
     id: 12,
@@ -125,7 +136,8 @@ const servicesData = [
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
         <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="2"/>
       </svg>
-    )
+    ),
+    url: "/../../../public/bicycles.jpg"
     },
     {
     id: 13,
@@ -135,7 +147,8 @@ const servicesData = [
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
         <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="2"/>
       </svg>
-    )
+    ),
+    url: "/../../../public/bicycles.jpg"
     },
     {
     id: 14,
@@ -145,7 +158,8 @@ const servicesData = [
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
         <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="2"/>
       </svg>
-    )
+    ),
+    url: "/../../../public/bicycles.jpg"
     },
     {
     id: 15,
@@ -155,7 +169,8 @@ const servicesData = [
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
         <path d="M3 9h18M9 21V9" stroke="currentColor" strokeWidth="2"/>
       </svg>
-    )
+    ),
+    url: "/../../../public/bicycles.jpg"
     }
 ];
 
@@ -188,6 +203,7 @@ export default function Services() {
                             title={service.title}
                             icon={service.icon}
                             serviceID={service.id}
+                            imageUrl={service.url}
                         />
                     ))}
                 </div>

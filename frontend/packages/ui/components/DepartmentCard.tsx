@@ -1,23 +1,31 @@
 "use client";
 import React from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface DepartmentCardProps {
   title: string;
   icon?: React.ReactNode;
   serviceID?: Number;
+  imageUrl?: string;
 }
 
 export default function DepartmentCard({
   title = "Government Department",
   icon = <DefaultIcon />,
   serviceID,
+  imageUrl,
   }: DepartmentCardProps) {
 
+    const router = useRouter();
+
+    const navigateToService = () => {
+      router.push(`/services/${serviceID}`);
+    };
+
     return (
-      <Link 
-        href={`services/${serviceID}`} 
-        className="block w-full hover:no-underline"
+      <button 
+        onClick={navigateToService}
+        className="block w-full hover:no-underline text-left"
       >
         <div className="flex items-center bg-primary-500 gap-2 p-2 w-full rounded-[100px]">
           {/* Circle with icon */}
@@ -36,7 +44,7 @@ export default function DepartmentCard({
             {title}
           </h2>
         </div>
-      </Link>
+      </button>
     );
 }
 
