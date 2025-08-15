@@ -25,7 +25,7 @@ export default function DepartmentCard({
     return (
       <button 
         onClick={navigateToService}
-        className="block w-full hover:no-underline text-left"
+        className="block w-full hover:no-underline text-left cursor-pointer"
       >
         <div className="flex items-center bg-primary-500 gap-2 p-2 w-full rounded-[100px]">
           {/* Circle with icon */}
