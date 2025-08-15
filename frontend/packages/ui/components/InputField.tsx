@@ -10,7 +10,7 @@ interface InputFieldProps {
   required?: boolean;
 }
 
-export function InputField({ 
+export default function InputField({ 
   id, 
   label, 
   type, 
@@ -32,40 +32,8 @@ export function InputField({
         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         placeholder={placeholder}
         required={required}
+        suppressHydrationWarning={true}
       />
     </div>
-  );
-}
-
-interface FieldConfig {
-  id: string;
-  label: string;
-  type: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder: string;
-  required?: boolean;
-}
-
-interface InputFieldsProps {
-  fields: FieldConfig[];
-}
-
-export function InputFields({ fields }: InputFieldsProps) {
-  return (
-    <>
-      {fields.map((field) => (
-        <InputField
-          key={field.id}
-          id={field.id}
-          label={field.label}
-          type={field.type}
-          value={field.value}
-          onChange={field.onChange}
-          placeholder={field.placeholder}
-          required={field.required}
-        />
-      ))}
-    </>
   );
 }

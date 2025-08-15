@@ -2,9 +2,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FormDiv, Button, InputField } from "@myorg/ui";
+import { BlurredDiv, Button, InputField } from "@myorg/ui";
 
-export default function LoginPage() {
+export default function GovernmentDepartments() {
   const [nic, setNic] = useState("");
   const [password, setPassword] = useState("");
 
@@ -28,12 +28,12 @@ export default function LoginPage() {
       </div>
       
       {/* Content */}
-      <div className="relative min-h-screen flex items-center justify-center p-4">
+      <div className="relative min-h-screen flex items-center justify-center">
         <div className="w-full max-w-md">
-          <FormDiv>
+          <BlurredDiv>
             <div className="w-full space-y-6">
-              <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">
-                Login
+              <h1 className="text-xl font-bold text-center text-white text-center max-w-sm pt-4">
+                Browse through Government Departments
               </h1>
               
               <form onSubmit={handleLogin} className="space-y-4" suppressHydrationWarning={true}>
@@ -70,11 +70,9 @@ export default function LoginPage() {
                 ))}
                 
                 <div className="pt-4">
-                  <Link href="/government-departments" passHref>
-                    <Button>
-                      Login
-                    </Button>
-                  </Link>
+                  <Button>
+                    Login
+                  </Button>
                 </div>
               </form>
               
@@ -87,7 +85,7 @@ export default function LoginPage() {
                 </p>
               </div>
             </div>
-          </FormDiv>
+          </BlurredDiv>
         </div>
       </div>
     </div>
