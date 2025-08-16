@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { BlurredDiv, ListItem } from "@myorg/ui";
+import { BlurredDiv, ListItem, ReservationListItem, CitizenHeader } from "@myorg/ui";
 
 export default function GovernmentDepartments() {
   const [showAll, setShowAll] = useState(false);
@@ -75,8 +75,23 @@ export default function GovernmentDepartments() {
       </div>
       
       {/* Content */}
-      <div className="relative min-h-screen flex items-center justify-center">
-        <div className="w-full max-w-md">
+      <div className="relative min-h-screen flex flex-col">
+        {/* Header */}
+        <CitizenHeader logoSrc="/logo.png" />
+        
+        <div className="flex-1 flex items-start justify-center pt-36">
+          <div className="w-full max-w-md">
+            {/* Reservation Item */}
+            <ReservationListItem
+            title="Nuwara Eliya Rest House"
+            startDate="12 , Aug, 2025"
+            endDate="14, Aug, 2025"
+            dueDate="In 3 days"
+            guests={6}
+            nights={2}
+            onClick={() => console.log("Reservation clicked")}
+          />
+          
           <BlurredDiv>
             <div className="w-full space-y-6">
               <h1 className="text-xl font-bold text-center text-white text-center max-w-sm pt-4">
@@ -118,5 +133,6 @@ export default function GovernmentDepartments() {
         </div>
       </div>
     </div>
+  </div>
   );
 }
