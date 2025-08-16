@@ -205,56 +205,58 @@ export default function DepartmentUnitPage() {
   };
 
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen gap-16">
-      <DepartmentHeader departmentName={department.name} />
+    <div className="font-sans grid grid-rows-[60px_1fr_20px] items-center justify-items-center min-h-screen gap-16">
+      <header className="w-full bg-primary-600 text-white text-center py-4">
+        <h1 className="text-2xl font-bold">{department.name}</h1>
+      </header>
 
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start container mx-auto px-4">
         {/* Head Office Section - Row-wise layout */}
         <div className="w-full bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-primary-600 mb-4">Head Office</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div>
-                <span className="font-medium text-primary-600">Location:</span> {department.address}
-                </div>
-                <div>
-                <span className="font-medium text-primary-600">District:</span> {department.district}
-                </div>
-                <div>
-                <span className="font-medium text-primary-600">Province:</span> {department.province}
-                </div>
-                <div>
-                <span className="font-medium text-primary-600">Registration Number:</span> {department.registrationNumber}
-                </div>
-                <div>
-                <span className="font-medium text-primary-600">Type:</span> {department.type}
-                </div>
-                <div>
-                <span className="font-medium text-primary-600">Status:</span> {department.status}
-                </div>
-                <div>
-                <span className="font-medium text-primary-600">Created:</span> {new Date(department.createdAt).toLocaleDateString()}
-                </div>
-                <div>
-                <span className="font-medium text-primary-600">Last Updated:</span> {new Date(department.updatedAt).toLocaleDateString()}
-                </div>
-                <div className="col-span-full mt-4">
-                <h3 className="text-md font-medium text-primary-600 mb-2">Contact Information</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                    <span className="font-medium text-primary-600">Emails:</span> {department.contactInfo.emails.join(", ")}
-                    </div>
-                    <div>
-                    <span className="font-medium text-primary-600">Phones:</span> {department.contactInfo.phones.join(", ")}
-                    </div>
-                    <div>
-                    <span className="font-medium text-primary-600">Website:</span>{" "}
-                    <a href={department.contactInfo.website} className="text-primary-600 hover:underline">
-                        {department.contactInfo.website}
-                    </a>
-                    </div>
-                </div>
-                </div>
+          <h2 className="text-lg font-semibold text-primary-600 mb-4">Head Office</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div>
+              <span className="font-medium text-primary-600">Location:</span> {department.address}
             </div>
+            <div>
+              <span className="font-medium text-primary-600">District:</span> {department.district}
+            </div>
+            <div>
+              <span className="font-medium text-primary-600">Province:</span> {department.province}
+            </div>
+            <div>
+              <span className="font-medium text-primary-600">Registration Number:</span> {department.registrationNumber}
+            </div>
+            <div>
+              <span className="font-medium text-primary-600">Type:</span> {department.type}
+            </div>
+            <div>
+              <span className="font-medium text-primary-600">Status:</span> {department.status}
+            </div>
+            <div>
+              <span className="font-medium text-primary-600">Created:</span> {new Date(department.createdAt).toLocaleDateString()}
+            </div>
+            <div>
+              <span className="font-medium text-primary-600">Last Updated:</span> {new Date(department.updatedAt).toLocaleDateString()}
+            </div>
+            <div className="col-span-full mt-4">
+              <h3 className="text-md font-medium text-primary-600 mb-2">Contact Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <span className="font-medium text-primary-600">Emails:</span> {department.contactInfo.emails.join(", ")}
+                </div>
+                <div>
+                  <span className="font-medium text-primary-600">Phones:</span> {department.contactInfo.phones.join(", ")}
+                </div>
+                <div>
+                  <span className="font-medium text-primary-600">Website:</span>{" "}
+                  <a href={department.contactInfo.website} className="text-primary-600 hover:underline">
+                    {department.contactInfo.website}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Branches List */}
