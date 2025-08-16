@@ -30,17 +30,14 @@ export class SubmissionsService extends BaseService {
     super();
   }
 
-  // Helper method to transform service responses
-  transformResponse<T>(success: boolean, message: string, data?: T) {
-    return success ? this.success(data, message) : this.error(message);
-  }
+  // No longer needed as we'll use BaseService methods directly
 
   async findAll(
     status?: SubmissionStatus,
     citizenId?: string,
     serviceId?: string,
     departmentId?: string,
-  ): Promise<SubmissionDocument[]> {
+  ) {
     const query: SubmissionQuery = {};
 
     if (status) {
@@ -62,7 +59,11 @@ export class SubmissionsService extends BaseService {
       query.serviceId = { $in: serviceIds };
     }
 
-    return this.submissionModel.find(query).sort({ createdAt: -1 }).exec();
+    const submissions = await this.submissionModel
+      .find(query)
+      .sort({ createdAt: -1 })
+      .exec();
+    return this.success(submissions, 'Submissions retrieved successfully');
   }
 
   async findById(id: Types.ObjectId | string): Promise<SubmissionDocument> {
@@ -78,7 +79,7 @@ export class SubmissionsService extends BaseService {
   async create(
     createSubmissionDto: CreateSubmissionDto,
     citizenId: Types.ObjectId | string,
-  ): Promise<SubmissionDocument> {
+  ) {
     // Check if the service exists
     await this.govServicesService.findById(createSubmissionDto.serviceId);
 
@@ -108,14 +109,15 @@ export class SubmissionsService extends BaseService {
       citizenId,
     });
 
-    return newSubmission.save();
+    const submission = await newSubmission.save();
+    return this.success(submission, 'Submission created successfully');
   }
 
   async updateStatus(
     id: Types.ObjectId | string,
     updateStatusDto: UpdateSubmissionStatusDto,
     userId: Types.ObjectId | string,
-  ): Promise<SubmissionDocument> {
+  ) {
     const submission = await this.findById(id);
 
     submission.status = updateStatusDto.status;
@@ -129,14 +131,18 @@ export class SubmissionsService extends BaseService {
       });
     }
 
-    return submission.save();
+    const updatedSubmission = await submission.save();
+    return this.success(
+      updatedSubmission,
+      'Submission status updated successfully',
+    );
   }
 
   async assignSubmission(
     id: Types.ObjectId | string,
     assignDto: AssignSubmissionDto,
     userId: Types.ObjectId | string,
-  ): Promise<SubmissionDocument> {
+  ) {
     const submission = await this.findById(id);
 
     submission.assignedTo = new Types.ObjectId(assignDto.assignedTo);
@@ -150,14 +156,15 @@ export class SubmissionsService extends BaseService {
       });
     }
 
-    return submission.save();
+    const updatedSubmission = await submission.save();
+    return this.success(updatedSubmission, 'Submission assigned successfully');
   }
 
   async addNote(
     id: Types.ObjectId | string,
     content: string,
     userId: Types.ObjectId | string,
-  ): Promise<SubmissionDocument> {
+  ) {
     const submission = await this.findById(id);
 
     submission.notes.push({
@@ -166,14 +173,15 @@ export class SubmissionsService extends BaseService {
       createdAt: new Date(),
     });
 
-    return submission.save();
+    const updatedSubmission = await submission.save();
+    return this.success(updatedSubmission, 'Note added successfully');
   }
 
   async cancel(
     id: Types.ObjectId | string,
     userId: Types.ObjectId | string,
     reason: string,
-  ): Promise<SubmissionDocument> {
+  ) {
     const submission = await this.findById(id);
 
     if (submission.status === SubmissionStatus.COMPLETED) {
@@ -188,6 +196,7 @@ export class SubmissionsService extends BaseService {
       createdAt: new Date(),
     });
 
-    return submission.save();
+    const updatedSubmission = await submission.save();
+    return this.success(updatedSubmission, 'Submission cancelled successfully');
   }
 }

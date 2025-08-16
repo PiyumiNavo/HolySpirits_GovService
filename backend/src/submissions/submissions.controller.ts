@@ -7,6 +7,7 @@ import {
   Patch,
   UseGuards,
   Query,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -56,16 +57,11 @@ export class SubmissionsController {
     @Query('serviceId') serviceId?: string,
     @Query('departmentId') departmentId?: string,
   ) {
-    const submissions = await this.submissionsService.findAll(
+    return this.submissionsService.findAll(
       status,
       citizenId,
       serviceId,
       departmentId,
-    );
-    return this.submissionsService.transformResponse(
-      true,
-      'Submissions retrieved successfully',
-      submissions,
     );
   }
 
@@ -78,16 +74,11 @@ export class SubmissionsController {
   })
   @Roles(UserRole.CITIZEN)
   async findMyCitizenSubmissions(@GetUser('_id') userId: string) {
-    const submissions = await this.submissionsService.findAll(
+    return this.submissionsService.findAll(
       undefined,
       userId,
       undefined,
       undefined,
-    );
-    return this.submissionsService.transformResponse(
-      true,
-      'Your submissions retrieved successfully',
-      submissions,
     );
   }
 
@@ -102,21 +93,28 @@ export class SubmissionsController {
   })
   @Roles(UserRole.DEPT_STAFF)
   async findAssignedSubmissions(@GetUser('_id') userId: string) {
+    // We need to modify the service to handle this case properly
     const submissions = await this.submissionsService.findAll(
       undefined,
       undefined,
       undefined,
       undefined,
     );
+
+    // Since the service now returns an ApiResponse, we need to access the data property
+    const submissionsData = submissions.data || [];
+
     // Filter assigned submissions in memory
-    const assignedSubmissions = submissions.filter(
+    const assignedSubmissions = submissionsData.filter(
       (submission) => submission.assignedTo?.toString() === userId,
     );
-    return this.submissionsService.transformResponse(
-      true,
-      'Your assigned submissions retrieved successfully',
-      assignedSubmissions,
-    );
+
+    // Return using the success format from BaseService
+    return {
+      status: HttpStatus.OK,
+      message: 'Your assigned submissions retrieved successfully',
+      data: assignedSubmissions,
+    };
   }
 
   @Get(':id')
@@ -129,12 +127,7 @@ export class SubmissionsController {
   })
   @ApiResponse({ status: 404, description: 'Submission not found' })
   async findOne(@Param('id', ParseObjectIdPipe) id: Types.ObjectId) {
-    const submission = await this.submissionsService.findById(id);
-    return this.submissionsService.transformResponse(
-      true,
-      'Submission retrieved successfully',
-      submission,
-    );
+    return this.submissionsService.findById(id);
   }
 
   @Post()
@@ -149,14 +142,9 @@ export class SubmissionsController {
     @Body() createSubmissionDto: CreateSubmissionDto,
     @GetUser('_id') citizenId: string,
   ) {
-    const submission = await this.submissionsService.create(
+    return this.submissionsService.create(
       createSubmissionDto,
       new Types.ObjectId(citizenId),
-    );
-    return this.submissionsService.transformResponse(
-      true,
-      'Submission created successfully',
-      submission,
     );
   }
 
@@ -175,15 +163,10 @@ export class SubmissionsController {
     @Body() updateStatusDto: UpdateSubmissionStatusDto,
     @GetUser('_id') userId: string,
   ) {
-    const submission = await this.submissionsService.updateStatus(
+    return this.submissionsService.updateStatus(
       id,
       updateStatusDto,
       new Types.ObjectId(userId),
-    );
-    return this.submissionsService.transformResponse(
-      true,
-      'Submission status updated successfully',
-      submission,
     );
   }
 
@@ -202,15 +185,10 @@ export class SubmissionsController {
     @Body() assignDto: AssignSubmissionDto,
     @GetUser('_id') userId: string,
   ) {
-    const submission = await this.submissionsService.assignSubmission(
+    return this.submissionsService.assignSubmission(
       id,
       assignDto,
       new Types.ObjectId(userId),
-    );
-    return this.submissionsService.transformResponse(
-      true,
-      'Submission assigned successfully',
-      submission,
     );
   }
 
@@ -229,15 +207,10 @@ export class SubmissionsController {
     @Body() addNoteDto: NoteDto,
     @GetUser('_id') userId: string,
   ) {
-    const submission = await this.submissionsService.addNote(
+    return this.submissionsService.addNote(
       id,
       addNoteDto.content,
       new Types.ObjectId(userId),
-    );
-    return this.submissionsService.transformResponse(
-      true,
-      'Note added successfully',
-      submission,
     );
   }
 
@@ -259,15 +232,10 @@ export class SubmissionsController {
     @Body() cancelDto: CancelSubmissionDto,
     @GetUser('_id') userId: string,
   ) {
-    const submission = await this.submissionsService.cancel(
+    return this.submissionsService.cancel(
       id,
       new Types.ObjectId(userId),
       cancelDto.reason,
-    );
-    return this.submissionsService.transformResponse(
-      true,
-      'Submission cancelled successfully',
-      submission,
     );
   }
 }
