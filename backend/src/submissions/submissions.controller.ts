@@ -24,17 +24,17 @@ import {
   CancelSubmissionDto,
 } from './dto/submission.dto';
 import { SubmissionResponseDto } from './dto/submission-response.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../users/schemas/user.schema';
 import { GetUser } from '../common/decorators/get-user.decorator';
 import { Types } from 'mongoose';
 import { SubmissionStatus } from './schemas/submission.schema';
 import { ParseObjectIdPipe } from '../common/pipes/parse-objectid.pipe';
+import { JwtGuard } from 'src/common/guards/jwt/jwt.guard';
 
 @ApiTags('submissions')
 @Controller('submissions')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtGuard)
 export class SubmissionsController {
   constructor(private readonly submissionsService: SubmissionsService) {}
 

@@ -67,7 +67,9 @@ export class SubmissionsService extends BaseService {
   async findById(id: Types.ObjectId | string): Promise<SubmissionDocument> {
     const submission = await this.submissionModel.findById(id).exec();
     if (!submission) {
-      throw new NotFoundException(`Submission with ID ${id} not found`);
+      throw new NotFoundException(
+        `Submission with ID ${id.toString()} not found`,
+      );
     }
     return submission;
   }
