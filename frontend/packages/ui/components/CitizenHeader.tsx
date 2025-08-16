@@ -32,24 +32,35 @@ export default function CitizenHeader({
         </div>
 
         {/* Action Icons */}
-        <div className="flex items-center gap-4"
+        <div className="flex items-center gap-4 p-3"
             style={{
               background: 'rgba(192, 226, 236, 0.07)',
-              borderTopLeftRadius: '50px',
-              borderTopRightRadius: '50px',
+              borderRadius: '50px',
               backdropFilter: 'blur(10px)'
             }}
         >
           {/* Map/Location Icon */}
-          <button className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
-            <svg className="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+          <button 
+            className="w-12 h-12 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(10px)'
+            }}
+          >
+            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22S19 14.25 19 9C19 5.13 15.87 2 12 2M12 11.5C10.62 11.5 9.5 10.38 9.5 9S10.62 6.5 12 6.5 14.5 7.62 14.5 9 13.38 11.5 12 11.5Z"/>
             </svg>
           </button>
 
           {/* Notification Icon */}
-          <button className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
-            <svg className="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+          <button 
+            className="w-12 h-12 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(10px)'
+            }}
+          >
+            <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22ZM18 16V11C18 7.93 16.36 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.64 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z"/>
             </svg>
           </button>
@@ -58,9 +69,13 @@ export default function CitizenHeader({
           <div className="relative">
             <button 
               onClick={toggleDropdown}
-              className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+              className="w-12 h-12 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+              style={{
+                background: 'rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(10px)'
+              }}
             >
-              <svg className="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z"/>
               </svg>
             </button>

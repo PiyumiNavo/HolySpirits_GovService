@@ -79,47 +79,59 @@ export default function GovernmentDepartments() {
         {/* Header */}
         <CitizenHeader logoSrc="/logo.png" />
         
-        <div className="flex-1 flex items-start justify-center pt-36">
+        <div className="flex-1 flex items-start justify-center pt-8">
           <div className="w-full max-w-md">
-            {/* Reservation Item */}
-            <ReservationListItem
-            title="Nuwara Eliya Rest House"
-            startDate="12 , Aug, 2025"
-            endDate="14, Aug, 2025"
-            dueDate="In 3 days"
-            guests={6}
-            nights={2}
-            onClick={() => console.log("Reservation clicked")}
-          />
+            {/* Reservation Item - Only show when not showing all departments */}
+            {!showAll && (
+              <ReservationListItem
+                title="Nuwara Eliya Rest House"
+                startDate="12 , Aug, 2025"
+                endDate="14, Aug, 2025"
+                dueDate="In 3 days"
+                guests={6}
+                nights={2}
+                onClick={() => console.log("Reservation clicked")}
+              />
+            )}
           
-          <BlurredDiv>
-            <div className="w-full space-y-6">
-              <h1 className="text-xl font-bold text-center text-white text-center max-w-sm pt-4">
-                Browse through Government Departments
-              </h1>
-              
-              <div className="space-y-3">
-                {displayedDepartments.map((department) => (
-                  <ListItem
-                    key={department.id}
-                    icon={department.icon}
-                    text={department.text}
-                    onClick={() => console.log(`Clicked on ${department.text}`)}
-                  />
-                ))}
-              </div>
-              
-              {departments.length > 3 && (
+          {/* Custom BlurredDiv for expanded view */}
+          {showAll ? (
+            <div 
+              className="w-full p-3 inline-flex flex-col items-center gap-5 fixed left-0 right-0"
+              style={{
+                background: 'rgba(192, 226, 236, 0.07)',
+                borderTopLeftRadius: '50px',
+                borderTopRightRadius: '50px',
+                backdropFilter: 'blur(10px)',
+                height: 'calc(100vh - 120px)',
+                marginTop: '120px',
+                overflowY: 'auto'
+              }}
+            >
+              <div className="w-full max-w-md space-y-6">
+                <h1 className="text-xl font-bold text-center text-white text-center max-w-sm pt-4">
+                  Browse through Government Departments
+                </h1>
+                
+                <div className="space-y-3">
+                  {displayedDepartments.map((department) => (
+                    <ListItem
+                      key={department.id}
+                      icon={department.icon}
+                      text={department.text}
+                      onClick={() => console.log(`Clicked on ${department.text}`)}
+                    />
+                  ))}
+                </div>
+                
                 <div className="flex justify-center py-4">
                   <button 
                     onClick={handleShowMore}
                     className="flex flex-col items-center gap-0.5 text-white hover:text-gray-200 transition-colors"
                   >
-                    <span className="text-sm font-medium">
-                      {showAll ? 'Show Less' : 'View All'}
-                    </span>
+                    <span className="text-sm font-medium">Show Less</span>
                     <svg 
-                      className={`w-6 h-6 transition-transform ${showAll ? 'rotate-180' : ''}`} 
+                      className="w-6 h-6 transition-transform rotate-180" 
                       fill="currentColor" 
                       viewBox="0 0 24 24"
                     >
@@ -127,9 +139,46 @@ export default function GovernmentDepartments() {
                     </svg>
                   </button>
                 </div>
-              )}
+              </div>
             </div>
-          </BlurredDiv>
+          ) : (
+            <BlurredDiv>
+              <div className="w-full space-y-6">
+                <h1 className="text-xl font-bold text-center text-white text-center max-w-sm pt-4">
+                  Browse through Government Departments
+                </h1>
+                
+                <div className="space-y-3">
+                  {displayedDepartments.map((department) => (
+                    <ListItem
+                      key={department.id}
+                      icon={department.icon}
+                      text={department.text}
+                      onClick={() => console.log(`Clicked on ${department.text}`)}
+                    />
+                  ))}
+                </div>
+                
+                {departments.length > 3 && (
+                  <div className="flex justify-center py-4">
+                    <button 
+                      onClick={handleShowMore}
+                      className="flex flex-col items-center gap-0.5 text-white hover:text-gray-200 transition-colors"
+                    >
+                      <span className="text-sm font-medium">View All</span>
+                      <svg 
+                        className="w-6 h-6 transition-transform" 
+                        fill="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M7 10l5 5 5-5H7z"/>
+                      </svg>
+                    </button>
+                  </div>
+                )}
+              </div>
+            </BlurredDiv>
+          )}
         </div>
       </div>
     </div>
