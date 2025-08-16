@@ -6,8 +6,10 @@ class ApiClient {
   private baseURL: string;
 
   constructor() {
-    // Use environment variable or fallback to localhost
-    this.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    // Use environment variable or fallback to backend port
+    this.baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+    
+    console.log('API Client initialized with baseURL:', this.baseURL); // Debug log
     
     this.instance = axios.create({
       baseURL: this.baseURL,

@@ -1,0 +1,64 @@
+version: '3.8'
+
+# Development override - use with: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+services:
+  backend:
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/.env:/app/.env
+      # Preserve node_modules to avoid reinstalling
+      - backend_node_modules:/app/node_modules
+    environment:
+      NODE_ENV: development
+    # Use nodemon for hot reload
+    command: ["npm", "run", "start:dev"]
+
+  admin_frontend:
+    volumes:
+      # Mount source code for hot reload
+      - ./frontend/apps/admin_app/src:/app/apps/admin_app/src
+      - ./frontend/packages/ui:/app/packages/ui
+      # Mount public folder
+      - ./frontend/apps/admin_app/public:/app/apps/admin_app/public
+      # Preserve node_modules
+      - admin_node_modules:/app/node_modules
+      - admin_app_node_modules:/app/apps/admin_app/node_modules
+      - ui_node_modules:/app/packages/ui/node_modules
+    environment:
+      NODE_ENV: development
+    # Use dev mode for hot reload
+    command: ["yarn", "workspace", "admin_app", "dev"]
+
+  department_frontend:
+    volumes:
+      - ./frontend/apps/department_app/src:/app/apps/department_app/src
+      - ./frontend/packages/ui:/app/packages/ui
+      - ./frontend/apps/department_app/public:/app/apps/department_app/public
+      - dept_node_modules:/app/node_modules
+      - dept_app_node_modules:/app/apps/department_app/node_modules
+      - ui_node_modules:/app/packages/ui/node_modules
+    environment:
+      NODE_ENV: development
+    command: ["yarn", "workspace", "department_app", "dev"]
+
+  citizen_frontend:
+    volumes:
+      - ./frontend/apps/citizen_app/src:/app/apps/citizen_app/src
+      - ./frontend/packages/ui:/app/packages/ui
+      - ./frontend/apps/citizen_app/public:/app/apps/citizen_app/public
+      - citizen_node_modules:/app/node_modules
+      - citizen_app_node_modules:/app/apps/citizen_app/node_modules
+      - ui_node_modules:/app/packages/ui/node_modules
+    environment:
+      NODE_ENV: development
+    command: ["yarn", "workspace", "citizen_app", "dev"]
+
+volumes:
+  backend_node_modules:
+  admin_node_modules:
+  admin_app_node_modules:
+  dept_node_modules:
+  dept_app_node_modules:
+  citizen_node_modules:
+  citizen_app_node_modules:
+  ui_node_modules:
