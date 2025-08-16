@@ -44,13 +44,11 @@ export class LocationsController {
     type: [LocationResponseDto],
   })
   async findAll(@Query('departmentId') departmentId?: string) {
-    let locations;
     if (departmentId) {
-      locations = await this.locationsService.findByDepartmentId(departmentId);
+      return this.locationsService.findByDepartmentId(departmentId);
     } else {
-      locations = await this.locationsService.findAll();
+      return this.locationsService.findAll();
     }
-    return this.locationsService.success(locations);
   }
 
   @Get(':id')
@@ -63,10 +61,7 @@ export class LocationsController {
   })
   @ApiResponse({ status: 404, description: 'Location not found' })
   async findOne(@Param('id') id: string) {
-    const location = await this.locationsService.findById(
-      new Types.ObjectId(id),
-    );
-    return this.locationsService.success(location);
+    return this.locationsService.findById(new Types.ObjectId(id));
   }
 
   @Post()
@@ -83,9 +78,7 @@ export class LocationsController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async create(@Body() createLocationDto: CreateLocationDto) {
-    const createdLocation =
-      await this.locationsService.create(createLocationDto);
-    return this.locationsService.success(createdLocation);
+    return this.locationsService.create(createLocationDto);
   }
 
   @Put(':id')
@@ -107,11 +100,10 @@ export class LocationsController {
     @Param('id') id: string,
     @Body() updateLocationDto: CreateLocationDto,
   ) {
-    const updatedLocation = await this.locationsService.update(
+    return this.locationsService.update(
       new Types.ObjectId(id),
       updateLocationDto,
     );
-    return this.locationsService.success(updatedLocation);
   }
 
   @Delete(':id')
@@ -129,9 +121,6 @@ export class LocationsController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Location not found' })
   async remove(@Param('id') id: string) {
-    const deletedLocation = await this.locationsService.delete(
-      new Types.ObjectId(id),
-    );
-    return this.locationsService.success(deletedLocation);
+    return this.locationsService.delete(new Types.ObjectId(id));
   }
 }

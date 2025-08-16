@@ -14,6 +14,7 @@ import { SchedulerModule } from './scheduler/scheduler.module';
 import { SubmissionsModule } from './submissions/submissions.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtGuard } from './common/guards/jwt/jwt.guard';
+import { SeederModule } from './seeder/seeder.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { JwtGuard } from './common/guards/jwt/jwt.guard';
     MailModule,
     SchedulerModule,
     SubmissionsModule,
+    SeederModule,
   ],
   controllers: [AppController],
   providers: [

@@ -39,8 +39,7 @@ export class DepartmentsController {
     type: [DepartmentResponseDto],
   })
   async findAll() {
-    const departments = await this.departmentsService.findAll();
-    return this.departmentsService.success(departments);
+    return this.departmentsService.findAll();
   }
 
   @Get(':id')
@@ -53,10 +52,7 @@ export class DepartmentsController {
   })
   @ApiResponse({ status: 404, description: 'Department not found' })
   async findOne(@Param('id') id: string) {
-    const department = await this.departmentsService.findById(
-      new Types.ObjectId(id),
-    );
-    return this.departmentsService.success(department);
+    return this.departmentsService.getDepartmentById(new Types.ObjectId(id));
   }
 
   @Post()
@@ -76,11 +72,7 @@ export class DepartmentsController {
     @Body() createDepartmentDto: CreateDepartmentDto,
     @Request() req: RequestWithUser,
   ) {
-    const createdDepartment = await this.departmentsService.create(
-      createDepartmentDto,
-      req.user._id,
-    );
-    return this.departmentsService.success(createdDepartment);
+    return this.departmentsService.create(createDepartmentDto, req.user._id);
   }
 
   @Put(':id')
@@ -102,11 +94,10 @@ export class DepartmentsController {
     @Param('id') id: string,
     @Body() updateDepartmentDto: CreateDepartmentDto,
   ) {
-    const updatedDepartment = await this.departmentsService.update(
+    return this.departmentsService.update(
       new Types.ObjectId(id),
       updateDepartmentDto,
     );
-    return this.departmentsService.success(updatedDepartment);
   }
 
   @Delete(':id')
@@ -124,9 +115,6 @@ export class DepartmentsController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Department not found' })
   async remove(@Param('id') id: string) {
-    const deletedDepartment = await this.departmentsService.delete(
-      new Types.ObjectId(id),
-    );
-    return this.departmentsService.success(deletedDepartment);
+    return this.departmentsService.delete(new Types.ObjectId(id));
   }
 }

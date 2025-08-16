@@ -1,4 +1,16 @@
 services:
+  mongodb:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
 
   backend:
     build:
@@ -6,27 +18,53 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    # depends_on:
-    #   postgres:
-    #     condition: service_healthy
+    depends_on:
+      mongodb:
+        condition: service_healthy
     environment:
-      DATABASE_URL: ${DATABASE_URL}
       NODE_ENV: development
+      MONGO_URI: ${MONGO_URI:-mongodb://mongodb:27017/e-gov}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@egov.lk}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@123}
+      CREATE_TEST_USERS: ${CREATE_TEST_USERS:-true}
+      TEST_USER_PASSWORD: ${TEST_USER_PASSWORD:-Citizen@123}
     volumes:
       - ./backend:/app
       - /app/node_modules
 
-  frontend:
+  citizen_frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: ./apps/citizen_app/Dockerfile
     ports:
-      - "5173:5173"
+      - "3001:3001"
+    # depends_on:
+    #   - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+
+  department_frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./apps/department_app/Dockerfile
+    ports:
+      - "3002:3002"
     depends_on:
       - backend
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
     environment:
-      VITE_API_URL: http://localhost:3000
+      NEXT_PUBLIC_API_URL: http://localhost:3000
 
+  admin_frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./apps/admin_app/Dockerfile
+    ports:
+      - "3003:3003"
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+
+volumes:
+  mongodb_data:
+    driver: local

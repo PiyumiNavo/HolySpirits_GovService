@@ -86,18 +86,13 @@ const initbranches = [
   }
 ];
 interface ServicePageProps {
-  id: number;
-  title: string;
-  description: string;
-  imageUrl?: string;
+  params: { id: string };
 }
 
-export default function ServicePage({ 
-    id,
-    title = "Registration of Motor Bikes",
-    description,
-    imageUrl="/bicycle.jpg",
- }: ServicePageProps) {
+export default function ServicePage({ params }: ServicePageProps) {
+  const serviceId = params.id;
+  const title = "Registration of Motor Bikes";
+  const imageUrl = "/bicycle.jpg";
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedBranch, setSelectedBranch] = useState<Branch | null>(null);
@@ -115,6 +110,11 @@ export default function ServicePage({
   const handleBranchClick = (branchId: number) => {
     const branch = initbranches.find(b => b.id === branchId);
     setSelectedBranch(branch ?? null);
+  };
+
+  const handleViewSubmissions = (branchId: number) => {
+    // Navigate to submissions page for this branch
+    window.location.href = `/services/${serviceId}/branch/${branchId}/submissions`;
   };
 
   const handleAddAssignee = () => {
@@ -189,6 +189,7 @@ export default function ServicePage({
                         counterCount={branch.counterCount}
                         assigneeCount={branch.assigneeCount}
                         onClick={handleBranchClick}
+                        onViewSubmissions={handleViewSubmissions}
                       />
                     ))}
                   </div>

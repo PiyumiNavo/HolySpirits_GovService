@@ -18,6 +18,7 @@ import {
 } from './dto/submission.dto';
 import { BaseService } from '../common/services/base.service';
 import { GovServicesService } from '../gov-services/gov-services.service';
+import { SubmissionQuery, AppointmentQueryConditions } from './interfaces';
 
 @Injectable()
 export class SubmissionsService extends BaseService {
@@ -29,18 +30,13 @@ export class SubmissionsService extends BaseService {
     super();
   }
 
-  // Helper method to transform service responses
-  transformResponse<T>(success: boolean, message: string, data?: T) {
-    return success ? this.success(data, message) : this.error(message);
-  }
-
   async findAll(
     status?: SubmissionStatus,
     citizenId?: string,
     serviceId?: string,
     departmentId?: string,
-  ): Promise<SubmissionDocument[]> {
-    const query: any = {};
+  ) {
+    const query: SubmissionQuery = {};
 
     if (status) {
       query.status = status;
@@ -56,18 +52,31 @@ export class SubmissionsService extends BaseService {
 
     if (departmentId) {
       // Get all services for the department
-      const services = await this.govServicesService.findAll(departmentId);
-      const serviceIds = services.map((service) => service._id);
+      const servicesResponse =
+        await this.govServicesService.findAll(departmentId);
+      // Extract services from response and ensure they have the correct type
+      const services = servicesResponse.data as Array<{
+        _id: Types.ObjectId | string;
+      }>;
+      const serviceIds: (Types.ObjectId | string)[] = services.map(
+        (service) => service._id,
+      );
       query.serviceId = { $in: serviceIds };
     }
 
-    return this.submissionModel.find(query).sort({ createdAt: -1 }).exec();
+    const submissions = await this.submissionModel
+      .find(query)
+      .sort({ createdAt: -1 })
+      .exec();
+    return this.success(submissions, 'Submissions retrieved successfully');
   }
 
   async findById(id: Types.ObjectId | string): Promise<SubmissionDocument> {
     const submission = await this.submissionModel.findById(id).exec();
     if (!submission) {
-      throw new NotFoundException(`Submission with ID ${id} not found`);
+      throw new NotFoundException(
+        `Submission with ID ${id.toString()} not found`,
+      );
     }
     return submission;
   }
@@ -75,7 +84,7 @@ export class SubmissionsService extends BaseService {
   async create(
     createSubmissionDto: CreateSubmissionDto,
     citizenId: Types.ObjectId | string,
-  ): Promise<SubmissionDocument> {
+  ) {
     // Check if the service exists
     await this.govServicesService.findById(createSubmissionDto.serviceId);
 
@@ -83,13 +92,16 @@ export class SubmissionsService extends BaseService {
     if (createSubmissionDto.appointment) {
       const { date, startTime, endTime, locationId } =
         createSubmissionDto.appointment;
+
+      const appointmentQuery: AppointmentQueryConditions = {
+        'appointment.date': date,
+        'appointment.startTime': startTime,
+        'appointment.endTime': endTime,
+        'appointment.locationId': locationId,
+      };
+
       const existingAppointment = await this.submissionModel
-        .findOne({
-          'appointment.date': date,
-          'appointment.startTime': startTime,
-          'appointment.endTime': endTime,
-          'appointment.locationId': locationId,
-        })
+        .findOne(appointmentQuery)
         .exec();
 
       if (existingAppointment) {
@@ -102,14 +114,15 @@ export class SubmissionsService extends BaseService {
       citizenId,
     });
 
-    return newSubmission.save();
+    const submission = await newSubmission.save();
+    return this.success(submission, 'Submission created successfully');
   }
 
   async updateStatus(
     id: Types.ObjectId | string,
     updateStatusDto: UpdateSubmissionStatusDto,
     userId: Types.ObjectId | string,
-  ): Promise<SubmissionDocument> {
+  ) {
     const submission = await this.findById(id);
 
     submission.status = updateStatusDto.status;
@@ -123,14 +136,18 @@ export class SubmissionsService extends BaseService {
       });
     }
 
-    return submission.save();
+    const updatedSubmission = await submission.save();
+    return this.success(
+      updatedSubmission,
+      'Submission status updated successfully',
+    );
   }
 
   async assignSubmission(
     id: Types.ObjectId | string,
     assignDto: AssignSubmissionDto,
     userId: Types.ObjectId | string,
-  ): Promise<SubmissionDocument> {
+  ) {
     const submission = await this.findById(id);
 
     submission.assignedTo = new Types.ObjectId(assignDto.assignedTo);
@@ -144,14 +161,15 @@ export class SubmissionsService extends BaseService {
       });
     }
 
-    return submission.save();
+    const updatedSubmission = await submission.save();
+    return this.success(updatedSubmission, 'Submission assigned successfully');
   }
 
   async addNote(
     id: Types.ObjectId | string,
     content: string,
     userId: Types.ObjectId | string,
-  ): Promise<SubmissionDocument> {
+  ) {
     const submission = await this.findById(id);
 
     submission.notes.push({
@@ -160,14 +178,15 @@ export class SubmissionsService extends BaseService {
       createdAt: new Date(),
     });
 
-    return submission.save();
+    const updatedSubmission = await submission.save();
+    return this.success(updatedSubmission, 'Note added successfully');
   }
 
   async cancel(
     id: Types.ObjectId | string,
     userId: Types.ObjectId | string,
     reason: string,
-  ): Promise<SubmissionDocument> {
+  ) {
     const submission = await this.findById(id);
 
     if (submission.status === SubmissionStatus.COMPLETED) {
@@ -182,6 +201,7 @@ export class SubmissionsService extends BaseService {
       createdAt: new Date(),
     });
 
-    return submission.save();
+    const updatedSubmission = await submission.save();
+    return this.success(updatedSubmission, 'Submission cancelled successfully');
   }
 }

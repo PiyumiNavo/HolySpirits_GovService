@@ -74,14 +74,6 @@ export default function Dashboard() {
           </p>
         </div>
 
-        {/* Search Bar */}
-        <div className="flex flex-col gap-2 w-full">
-          <SearchBar 
-            placeholder="Search applications, services, or staff..."
-            onSearch={setSearchQuery}
-          />
-        </div>
-
         {/* Key Metrics Grid */}
         <div className="w-full">
           <h2 className="text-xl font-semibold text-primary-600 mb-4">Key Metrics</h2>

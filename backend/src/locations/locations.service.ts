@@ -14,37 +14,39 @@ export class LocationsService extends BaseService {
     super();
   }
 
-  async findAll(): Promise<LocationDocument[]> {
-    return this.locationModel.find().exec();
+  async findAll() {
+    const locations = await this.locationModel.find().exec();
+    return this.success(locations, 'Locations retrieved successfully');
   }
 
-  async findById(id: Types.ObjectId | string): Promise<LocationDocument> {
+  async findById(id: Types.ObjectId | string) {
     const location = await this.locationModel.findById(id).exec();
     if (!location) {
       throw new NotFoundException(
         `Location with ID ${id.toString()} not found`,
       );
     }
-    return location;
+    return this.success(location, 'Location retrieved successfully');
   }
 
-  async findByDepartmentId(
-    departmentId: Types.ObjectId | string,
-  ): Promise<LocationDocument[]> {
-    return this.locationModel.find({ departmentId }).exec();
+  async findByDepartmentId(departmentId: Types.ObjectId | string) {
+    const locations = await this.locationModel.find({ departmentId }).exec();
+    return this.success(
+      locations,
+      'Department locations retrieved successfully',
+    );
   }
 
-  async create(
-    createLocationDto: CreateLocationDto,
-  ): Promise<LocationDocument> {
+  async create(createLocationDto: CreateLocationDto) {
     const newLocation = new this.locationModel(createLocationDto);
-    return newLocation.save();
+    const location = await newLocation.save();
+    return this.success(location, 'Location created successfully');
   }
 
   async update(
     id: Types.ObjectId | string,
     updateData: Partial<CreateLocationDto>,
-  ): Promise<LocationDocument> {
+  ) {
     const updatedLocation = await this.locationModel
       .findByIdAndUpdate(id, updateData, { new: true })
       .exec();
@@ -55,10 +57,10 @@ export class LocationsService extends BaseService {
       );
     }
 
-    return updatedLocation;
+    return this.success(updatedLocation, 'Location updated successfully');
   }
 
-  async delete(id: Types.ObjectId | string): Promise<LocationDocument> {
+  async delete(id: Types.ObjectId | string) {
     const deletedLocation = await this.locationModel
       .findByIdAndDelete(id)
       .exec();
@@ -69,6 +71,6 @@ export class LocationsService extends BaseService {
       );
     }
 
-    return deletedLocation;
+    return this.success(deletedLocation, 'Location deleted successfully');
   }
 }
