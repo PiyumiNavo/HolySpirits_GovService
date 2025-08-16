@@ -8,6 +8,7 @@ import {
   UseGuards,
   Query,
   HttpStatus,
+  Req,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -27,11 +28,11 @@ import {
 import { SubmissionResponseDto } from './dto/submission-response.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { UserRole } from '../users/schemas/user.schema';
-import { GetUser } from '../common/decorators/get-user.decorator';
 import { Types } from 'mongoose';
 import { SubmissionStatus } from './schemas/submission.schema';
 import { ParseObjectIdPipe } from '../common/pipes/parse-objectid.pipe';
 import { JwtGuard } from 'src/common/guards/jwt/jwt.guard';
+import { type RequestWithUser } from 'src/auth/interfaces/request-with-user.interface';
 
 @ApiTags('submissions')
 @Controller('submissions')
@@ -73,10 +74,10 @@ export class SubmissionsController {
     type: [SubmissionResponseDto],
   })
   @Roles(UserRole.CITIZEN)
-  async findMyCitizenSubmissions(@GetUser('_id') userId: string) {
+  async findMyCitizenSubmissions(@Req() req: RequestWithUser) {
     return this.submissionsService.findAll(
       undefined,
-      userId,
+      req.user._id,
       undefined,
       undefined,
     );
@@ -92,7 +93,7 @@ export class SubmissionsController {
     type: [SubmissionResponseDto],
   })
   @Roles(UserRole.DEPT_STAFF)
-  async findAssignedSubmissions(@GetUser('_id') userId: string) {
+  async findAssignedSubmissions(@Req() req: RequestWithUser) {
     // We need to modify the service to handle this case properly
     const submissions = await this.submissionsService.findAll(
       undefined,
@@ -106,7 +107,8 @@ export class SubmissionsController {
 
     // Filter assigned submissions in memory
     const assignedSubmissions = submissionsData.filter(
-      (submission) => submission.assignedTo?.toString() === userId,
+      (submission) =>
+        submission.assignedTo?.toString() === req.user._id.toString(),
     );
 
     // Return using the success format from BaseService
@@ -140,11 +142,11 @@ export class SubmissionsController {
   @Roles(UserRole.CITIZEN)
   async create(
     @Body() createSubmissionDto: CreateSubmissionDto,
-    @GetUser('_id') citizenId: string,
+    @Req() req: RequestWithUser,
   ) {
     return this.submissionsService.create(
       createSubmissionDto,
-      new Types.ObjectId(citizenId),
+      new Types.ObjectId(req.user._id),
     );
   }
 
@@ -161,12 +163,12 @@ export class SubmissionsController {
   async updateStatus(
     @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
     @Body() updateStatusDto: UpdateSubmissionStatusDto,
-    @GetUser('_id') userId: string,
+    @Req() req: RequestWithUser,
   ) {
     return this.submissionsService.updateStatus(
       id,
       updateStatusDto,
-      new Types.ObjectId(userId),
+      new Types.ObjectId(req.user._id),
     );
   }
 
@@ -183,12 +185,12 @@ export class SubmissionsController {
   async assignSubmission(
     @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
     @Body() assignDto: AssignSubmissionDto,
-    @GetUser('_id') userId: string,
+    @Req() req: RequestWithUser,
   ) {
     return this.submissionsService.assignSubmission(
       id,
       assignDto,
-      new Types.ObjectId(userId),
+      new Types.ObjectId(req.user._id),
     );
   }
 
@@ -205,12 +207,12 @@ export class SubmissionsController {
   async addNote(
     @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
     @Body() addNoteDto: NoteDto,
-    @GetUser('_id') userId: string,
+    @Req() req: RequestWithUser,
   ) {
     return this.submissionsService.addNote(
       id,
       addNoteDto.content,
-      new Types.ObjectId(userId),
+      new Types.ObjectId(req.user._id),
     );
   }
 
@@ -230,11 +232,11 @@ export class SubmissionsController {
   async cancelSubmission(
     @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
     @Body() cancelDto: CancelSubmissionDto,
-    @GetUser('_id') userId: string,
+    @Req() req: RequestWithUser,
   ) {
     return this.submissionsService.cancel(
       id,
-      new Types.ObjectId(userId),
+      new Types.ObjectId(req.user._id),
       cancelDto.reason,
     );
   }
