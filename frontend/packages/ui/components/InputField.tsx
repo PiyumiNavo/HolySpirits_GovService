@@ -12,7 +12,7 @@ interface InputFieldProps {
   className?: string;
 }
 
-export function InputField({ 
+export default function InputField({ 
   id, 
   label, 
   type, 
@@ -41,43 +41,9 @@ export function InputField({
         `}
         placeholder={placeholder}
         required={required}
+        suppressHydrationWarning={true}
       />
       {error && <p className="mt-1 text-sm text-error-500">{error}</p>}
     </div>
-  );
-}
-
-interface FieldConfig {
-  id: string;
-  label: string;
-  type: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder: string;
-  required?: boolean;
-  error?: string;
-}
-
-interface InputFieldsProps {
-  fields: FieldConfig[];
-}
-
-export function InputFields({ fields }: InputFieldsProps) {
-  return (
-    <>
-      {fields.map((field) => (
-        <InputField
-          key={field.id}
-          id={field.id}
-          label={field.label}
-          type={field.type}
-          value={field.value}
-          onChange={field.onChange}
-          placeholder={field.placeholder}
-          required={field.required}
-          error={field.error}
-        />
-      ))}
-    </>
   );
 }
