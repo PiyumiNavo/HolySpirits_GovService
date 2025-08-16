@@ -52,6 +52,15 @@ export default function GovernmentDepartments() {
           <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5H6.5C5.84 5 5.28 5.42 5.08 6.01L3 12V20C3 20.55 3.45 21 4 21H5C5.55 21 6 20.55 6 20V19H18V20C18 20.55 18.45 21 19 21H20C20.55 21 21 20.55 21 20V12L18.92 6.01M6.5 16C5.67 16 5 15.33 5 14.5S5.67 13 6.5 13 8 13.67 8 14.5 7.33 16 6.5 16M17.5 16C16.67 16 16 15.33 16 14.5S16.67 13 17.5 13 19 13.67 19 14.5 18.33 16 17.5 16M5 11L6.5 6.5H17.5L19 11H5Z"/>
         </svg>
       )
+    },
+    {
+      id: "6",
+      text: "Ministry of Transport",
+      icon: (
+        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5H6.5C5.84 5 5.28 5.42 5.08 6.01L3 12V20C3 20.55 3.45 21 4 21H5C5.55 21 6 20.55 6 20V19H18V20C18 20.55 18.45 21 19 21H20C20.55 21 21 20.55 21 20V12L18.92 6.01M6.5 16C5.67 16 5 15.33 5 14.5S5.67 13 6.5 13 8 13.67 8 14.5 7.33 16 6.5 16M17.5 16C16.67 16 16 15.33 16 14.5S16.67 13 17.5 13 19 13.67 19 14.5 18.33 16 17.5 16M5 11L6.5 6.5H17.5L19 11H5Z"/>
+        </svg>
+      )
     }
   ];
 
@@ -104,7 +113,6 @@ export default function GovernmentDepartments() {
                 borderTopRightRadius: '50px',
                 backdropFilter: 'blur(10px)',
                 height: 'calc(100vh - 80px)',
-                marginTop: '80px',
                 overflowY: 'auto'
               }}
             >
@@ -113,7 +121,13 @@ export default function GovernmentDepartments() {
                   Browse through Government Departments
                 </h1>
                 
-                <div className="space-y-3">
+                <div 
+                  className="space-y-3"
+                  style={{
+                    maxHeight: displayedDepartments.length > 5 ? '500px' : 'auto',
+                    overflowY: displayedDepartments.length > 5 ? 'auto' : 'visible'
+                  }}
+                >
                   {displayedDepartments.map((department) => (
                     <ListItem
                       key={department.id}
@@ -148,7 +162,13 @@ export default function GovernmentDepartments() {
                   Browse through Government Departments
                 </h1>
                 
-                <div className="space-y-3">
+                <div 
+                  className="space-y-3"
+                  style={{
+                    maxHeight: displayedDepartments.length > 5 ? '400px' : 'auto',
+                    overflowY: displayedDepartments.length > 5 ? 'auto' : 'visible'
+                  }}
+                >
                   {displayedDepartments.map((department) => (
                     <ListItem
                       key={department.id}
