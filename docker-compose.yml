@@ -33,19 +33,38 @@ services:
       - ./backend:/app
       - /app/node_modules
 
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "5173:5173"
-  #   depends_on:
-  #     - backend
-  #   volumes:
-  #     - ./frontend:/app
-  #     - /app/node_modules
-  #   environment:
-  #     VITE_API_URL: http://localhost:3000
+  citizen_frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./apps/citizen_app/Dockerfile
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+
+  department_frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./apps/department_app/Dockerfile
+    ports:
+      - "3002:3002"
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+
+  admin_frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./apps/admin_app/Dockerfile
+    ports:
+      - "3003:3003"
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000
 
 volumes:
   mongodb_data:
