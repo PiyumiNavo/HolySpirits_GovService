@@ -144,7 +144,8 @@ export default function ServicesPage() {
   };
 
   const handleDepartmentClick = (department: { id: string; text: string; icon: React.ReactNode }) => {
-    setSelectedDepartment(department);
+    // Navigate to individual service page
+    window.location.href = `/government-departments/services/${department.id}`;
   };
 
   return (
