@@ -18,3 +18,4 @@ export { default as TextArea } from "./components/TextArea";
 export { default as SelectableBranchCard } from "./components/SelectableBranchCard";
 export { default as DepartmentHeader } from "./components/DepartmentHeader";
 export { default as DepartmentList } from "./components/DepartmentList";
+export { default as DepartmentBranchCard } from "./components/DepartmentBranchCard";
