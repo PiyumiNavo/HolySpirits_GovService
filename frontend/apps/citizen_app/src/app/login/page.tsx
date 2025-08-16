@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { FormDiv, Button, InputField } from "@myorg/ui";
+import { FormDiv, Button, InputField, Heading } from "@myorg/ui";
 
 export default function LoginPage() {
   const [nic, setNic] = useState("");
@@ -32,9 +32,15 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           <FormDiv>
             <div className="w-full space-y-6">
-              <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">
+              <Heading 
+                level={1}
+                color="gray"
+                size="2xl"
+                align="center"
+                className="mb-8"
+              >
                 Login
-              </h1>
+              </Heading>
               
               <form onSubmit={handleLogin} className="space-y-4" suppressHydrationWarning={true}>
                 {[
