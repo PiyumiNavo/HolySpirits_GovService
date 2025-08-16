@@ -23,8 +23,8 @@ To start all services at once:
 # On Windows PowerShell
 .\start-dev.ps1
 
-# Alternatively, use Docker Compose directly
-docker-compose up
+# Alternatively, use Docker Compose directly with the dev configuration
+docker-compose -f docker-compose.dev.yml up
 ```
 
 This will start all services in Docker containers, and they will be accessible at:
@@ -53,10 +53,7 @@ When working with Docker, any changes to the code require rebuilding the contain
 
 ```bash
 # Rebuild a specific service
-docker-compose build backend
-docker-compose build citizen_frontend
-docker-compose build department_frontend
-docker-compose build admin_frontend
+docker-compose -f docker-compose.dev.yml build backend
 
 # Restart a specific service
 docker-compose up -d --no-deps backend
@@ -67,11 +64,11 @@ docker-compose up -d --no-deps backend
 To view the logs of a specific service:
 
 ```bash
-docker-compose logs -f backend
-docker-compose logs -f citizen_frontend
-docker-compose logs -f department_frontend
-docker-compose logs -f admin_frontend
-docker-compose logs -f mongodb
+docker-compose -f docker-compose.dev.yml logs -f backend
+docker-compose -f docker-compose.dev.yml logs -f citizen_frontend_dev
+docker-compose -f docker-compose.dev.yml logs -f department_frontend_dev
+docker-compose -f docker-compose.dev.yml logs -f admin_frontend_dev
+docker-compose -f docker-compose.dev.yml logs -f mongodb
 ```
 
 ## Stopping All Services
@@ -79,11 +76,11 @@ docker-compose logs -f mongodb
 To stop all services:
 
 ```bash
-docker-compose down
+docker-compose -f docker-compose.dev.yml down
 ```
 
 To stop all services and remove volumes (this will delete database data):
 
 ```bash
-docker-compose down -v
+docker-compose -f docker-compose.dev.yml down -v
 ```

@@ -1,48 +1,30 @@
-FROM node:20-alpine AS base
+# Use a Node.js base image
+FROM node:18-alpine
 
-# Install dependencies only when needed
-FROM base AS deps
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json files for all workspaces
+# Copy package.json files
 COPY package.json ./
 COPY packages/ui/package.json ./packages/ui/
 COPY apps/admin_app/package.json ./apps/admin_app/
 
 # Install dependencies
-RUN npm ci
+RUN npm install --legacy-peer-deps
 
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# Copy the rest of the application code
 COPY . .
 
-# Build the application
+# Build the Next.js application
 WORKDIR /app/apps/admin_app
 RUN npm run build
 
-# Production image, copy all the files and run next
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV=production
-
-# Create a non-root user
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-# Copy necessary files
-COPY --from=builder /app/apps/admin_app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/apps/admin_app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/admin_app/.next/static ./.next/static
-
-USER nextjs
-
+# Expose the port the app runs on
 EXPOSE 3003
 
+# Set hostname to allow external connections
 ENV PORT=3003
-# Set hostname to localhost
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "apps/admin_app/server.js"]
+# Start the Next.js application
+CMD ["npm", "start"]
