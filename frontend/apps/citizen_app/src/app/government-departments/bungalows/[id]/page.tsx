@@ -25,12 +25,6 @@ export default function BungalowPage({ params }: BungalowPageProps) {
     priceUnit: "per night",
     staffNote: "Special rates for government staff",
     images: ["/nuwara-eliya.jpg", "/ella.jpg", "/kandy.jpg"],
-    amenities: [
-      { name: "Swimming Pool", icon: "S", color: "bg-yellow-200 text-yellow-800" },
-      { name: "Garden", icon: "G", color: "bg-green-200 text-green-800" },
-      { name: "Parking", icon: "P", color: "bg-pink-200 text-pink-800" },
-      { name: "WiFi", icon: "W", color: "bg-blue-200 text-blue-800" }
-    ],
     description: "A beautiful government rest house located in the heart of Nuwara Eliya. Perfect for family getaways and official retreats. The property offers stunning mountain views and modern amenities.",
     features: [
       "Air Conditioning",
@@ -62,19 +56,6 @@ export default function BungalowPage({ params }: BungalowPageProps) {
       <CitizenHeader logoSrc="/logo.png" />
       
       <div className="px-4 pt-6 max-w-6xl mx-auto">
-        {/* Back Button */}
-        <div className="mb-6">
-          <Link 
-            href="/government-departments/bungalows"
-            className="flex items-center text-blue-600 hover:text-blue-800 transition-colors"
-          >
-            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-            </svg>
-            Back to Bungalows
-          </Link>
-        </div>
-
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Images and Details */}
@@ -88,18 +69,6 @@ export default function BungalowPage({ params }: BungalowPageProps) {
                   fill
                   className="object-cover"
                 />
-                {/* Amenity Badges */}
-                <div className="absolute top-4 left-4 flex gap-2">
-                  {bungalow.amenities.map((amenity, index) => (
-                    <span
-                      key={index}
-                      className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold ${amenity.color}`}
-                      title={amenity.name}
-                    >
-                      {amenity.icon}
-                    </span>
-                  ))}
-                </div>
               </div>
               
               {/* Thumbnail Images */}
@@ -229,9 +198,11 @@ export default function BungalowPage({ params }: BungalowPageProps) {
               </div>
 
               {/* Book Button */}
-              <Button onClick={handleBooking} className="w-full">
-                Reserve Now
-              </Button>
+              <Link href={`/government-departments/bungalows/${bungalow.id}/make-reservation`}>
+                <Button className="w-full">
+                  Reserve Now
+                </Button>
+              </Link>
               
               <p className="text-xs text-gray-500 text-center mt-2">
                 You won't be charged yet

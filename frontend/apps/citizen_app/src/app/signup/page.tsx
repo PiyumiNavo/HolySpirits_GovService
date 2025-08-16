@@ -86,7 +86,7 @@ export default function SigninPage() {
                 <div className="pt-4">
                   <Link href="/government-departments" passHref>
                     <Button>
-                      Login
+                      Sign Up
                     </Button>
                   </Link>
                 </div>
