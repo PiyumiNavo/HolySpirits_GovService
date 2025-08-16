@@ -257,6 +257,19 @@ export default function DepartmentBranches() {
     setShowServiceModal(true);
   };
 
+  const handleRemoveService = (branchId: number, serviceId: number) => {
+    setBranches(prevBranches => 
+      prevBranches.map(branch => 
+        branch.id === branchId
+          ? { 
+              ...branch, 
+              services: branch.services.filter(service => service.id !== serviceId) 
+            }
+          : branch
+      )
+    );
+  };
+
   const handleServiceSubmit = () => {
     if (!currentBranchId || !newService.serviceId) return;
 
@@ -340,6 +353,7 @@ export default function DepartmentBranches() {
                 onRemove={handleRemoveBranch}
                 onHoursUpdate={handleHoursUpdate}
                 onAddService={() => handleAddServiceClick(branch.id)}
+                onRemoveService={(branchId, serviceId) => handleRemoveService(branchId, serviceId)}
                 availableServices={allAvailableServices.filter(service => 
                   !branch.services.some(s => s.id === service.id)
                 )}

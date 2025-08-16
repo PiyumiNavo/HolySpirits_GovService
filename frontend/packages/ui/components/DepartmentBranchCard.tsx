@@ -42,6 +42,7 @@ interface BranchCardProps {
   onRemove: (id: number) => void;
   onHoursUpdate: (id: number, hours: DailyHours) => void;
   onAddService: (id: number, service: Service) => void;
+  onRemoveService: (branchId: number, serviceId: number) => void;
   availableServices: { id: number; name: string }[];
 }
 
@@ -64,6 +65,7 @@ export default function BranchCard({
   onRemove,
   onHoursUpdate,
   onAddService,
+  onRemoveService,
   availableServices
 }: BranchCardProps) {
   const router = useRouter();
@@ -71,6 +73,11 @@ export default function BranchCard({
   const [editingHours, setEditingHours] = useState(false);
   const [tempHours, setTempHours] = useState<DailyHours>(hours);
   const [showAddService, setShowAddService] = useState(false);
+  const [showServiceModal, setShowServiceModal] = useState(false);
+  const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
+  const [serviceToRemove, setServiceToRemove] = useState<number | null>(null);
+  const [isAddingService, setIsAddingService] = useState(false);
   const [newService, setNewService] = useState<{
     serviceId: string;
     assignees: Omit<Assignee, 'id'>[];
@@ -79,8 +86,16 @@ export default function BranchCard({
     assignees: [{ name: "", email: "", phone: "" }]
   });
 
-  const handleServiceClick = (serviceId: number) => {
-    router.push(`/services/${serviceId}`);
+  const [isAddingAssignee, setIsAddingAssignee] = useState(false);
+  const [newAssignee, setNewAssignee] = useState<Omit<Assignee, 'id'>>({ 
+    name: "", 
+    email: "", 
+    phone: "" 
+  });
+
+  const handleServiceClick = (service: Service) => {
+    setSelectedService(service);
+    setShowServiceModal(true);
   };
 
   const handleHoursSave = () => {
@@ -95,7 +110,7 @@ export default function BranchCard({
       : `${dayHours.open} - ${dayHours.close}`;
   };
 
-  const handleAddService = () => {
+  const handleAddService = async () => {
     const selectedService = availableServices.find(
       service => service.id === parseInt(newService.serviceId)
     );
@@ -111,15 +126,49 @@ export default function BranchCard({
             id: Date.now() + Math.random()
           }))
       });
+
       setShowAddService(false);
-      setNewService({
+        setNewService({
         serviceId: "",
         assignees: [{ name: "", email: "", phone: "" }]
       });
+
+      alert('Service added successfully!');
+
+      router.push('/branches');
+
     }
   };
 
   const handleAddAssignee = () => {
+    if (newAssignee.name && newAssignee.email && selectedService) {
+      const updatedService = {
+        ...selectedService,
+        assignees: [
+          ...selectedService.assignees,
+          {
+            ...newAssignee,
+            id: Date.now()
+          }
+        ]
+      };
+      setSelectedService(updatedService);
+      setNewAssignee({ name: "", email: "", phone: "" });
+      setIsAddingAssignee(false);
+    }
+  };
+
+  const removeAssignee = (assigneeId: number) => {
+    if (!selectedService) return;
+    
+    const updatedService = {
+      ...selectedService,
+      assignees: selectedService.assignees.filter(a => a.id !== assigneeId)
+    };
+    setSelectedService(updatedService);
+  };
+
+  const handleAddAssigneeToService = () => {
     setNewService(prev => ({
       ...prev,
       assignees: [...prev.assignees, { name: "", email: "", phone: "" }]
@@ -133,6 +182,19 @@ export default function BranchCard({
       [field]: value
     };
     setNewService({ ...newService, assignees: updatedAssignees });
+  };
+
+  const confirmRemoveService = (serviceId: number) => {
+    setServiceToRemove(serviceId);
+    setShowRemoveConfirm(true);
+  };
+
+  const handleRemoveService = () => {
+    if (serviceToRemove) {
+      onRemoveService(id, serviceToRemove);
+      setShowRemoveConfirm(false);
+      setServiceToRemove(null);
+    }
   };
 
   return (
@@ -165,19 +227,19 @@ export default function BranchCard({
               {editingHours ? (
                 <div className="flex gap-2">
                   <button 
-                    onClick={handleHoursSave}
-                    className="text-xs bg-primary-600 text-white px-2 py-1 rounded"
-                  >
-                    Save
-                  </button>
-                  <button 
                     onClick={() => {
                       setEditingHours(false);
                       setTempHours(hours);
                     }}
-                    className="text-xs bg-gray-200 px-2 py-1 rounded"
+                    className="text-xs px-4 py-2 rounded-full border"
                   >
                     Cancel
+                  </button>
+                  <button 
+                    onClick={handleHoursSave}
+                    className="text-xs bg-primary-600 text-white px-4 py-2 rounded-full"
+                  >
+                    Save
                   </button>
                 </div>
               ) : (
@@ -251,15 +313,28 @@ export default function BranchCard({
                 {services.map((service) => (
                   <div
                     key={service.id}
-                    onClick={() => handleServiceClick(service.id)}
-                    className="p-2 border rounded bg-primary-500 hover:bg-primary-50 hover:border-primary-300 cursor-pointer transition-colors"
+                    className="px-8 py-2 border rounded-full bg-primary-50 bg-primary-400 hover:border-primary-300 transition-colors relative group"
                   >
-                    <p className="text-sm font-medium">{service.name}</p>
-                    {service.assignees.length > 0 && (
-                      <p className="text-xs text-gray-500 mt-1">
-                        {service.assignees.length} assignee{service.assignees.length !== 1 ? 's' : ''}
-                      </p>
-                    )}
+                    <div 
+                      className="cursor-pointer"
+                      onClick={() => handleServiceClick(service)}
+                    >
+                      <p className="font-medium">{service.name}</p>
+                      {service.assignees.length > 0 && (
+                        <p className="text-xs text-gray-500 mt-1">
+                          {service.assignees.length} assignee{service.assignees.length !== 1 ? 's' : ''}
+                        </p>
+                      )}
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        confirmRemoveService(service.id);
+                      }}
+                      className="absolute top-6 right-8 text-gray-400 hover:text-red-600 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <TrashIcon className="h-4 w-4" />
+                    </button>
                   </div>
                 ))}
               </div>
@@ -283,8 +358,8 @@ export default function BranchCard({
 
       {/* Add Service Modal */}
       {showAddService && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+        <div className="fixed inset-0 bg-white/40 flex items-center justify-center z-50 p-4 backdrop-blur-xl">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto p-8">
             <h2 className="text-xl font-bold mb-4">Add Service to {branchName}</h2>
             
             <div className="mb-4">
@@ -308,41 +383,44 @@ export default function BranchCard({
             <div className="mb-4">
               <label className="block text-sm font-medium mb-2">Assignees</label>
               {newService.assignees.map((assignee, index) => (
-                <div key={index} className="mb-3 p-3 border rounded">
-                  <div className="mb-2">
-                    <label className="block text-xs text-gray-500 mb-1">Name</label>
-                    <input
-                      type="text"
-                      value={assignee.name}
-                      onChange={(e) => handleAssigneeChange(index, 'name', e.target.value)}
-                      className="w-full p-2 border rounded text-sm"
-                      placeholder="Full name"
-                    />
-                  </div>
-                  <div className="mb-2">
-                    <label className="block text-xs text-gray-500 mb-1">Email</label>
-                    <input
-                      type="email"
-                      value={assignee.email}
-                      onChange={(e) => handleAssigneeChange(index, 'email', e.target.value)}
-                      className="w-full p-2 border rounded text-sm"
-                      placeholder="Email address"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-500 mb-1">Phone</label>
-                    <input
-                      type="tel"
-                      value={assignee.phone}
-                      onChange={(e) => handleAssigneeChange(index, 'phone', e.target.value)}
-                      className="w-full p-2 border rounded text-sm"
-                      placeholder="Phone number"
-                    />
-                  </div>
+                <div key={index} className="bg-primary-400 p-4 rounded-lg mb-6 border border-primary-200">
+                    <h4 className="font-medium mb-3">New Assignee Details</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div className="mb-2">
+                            <label className="block text-xs text-gray-500 mb-1">Name</label>
+                            <input
+                            type="text"
+                            value={assignee.name}
+                            onChange={(e) => handleAssigneeChange(index, 'name', e.target.value)}
+                            className="w-full p-2 border rounded text-sm"
+                            placeholder="Full name"
+                            />
+                        </div>
+                        <div className="mb-2">
+                            <label className="block text-xs text-gray-500 mb-1">Email</label>
+                            <input
+                            type="email"
+                            value={assignee.email}
+                            onChange={(e) => handleAssigneeChange(index, 'email', e.target.value)}
+                            className="w-full p-2 border rounded text-sm"
+                            placeholder="Email address"
+                            />
+                        </div>
+                        <div>
+                        <label className="block text-xs text-gray-500 mb-1">Phone</label>
+                        <input
+                        type="tel"
+                        value={assignee.phone}
+                        onChange={(e) => handleAssigneeChange(index, 'phone', e.target.value)}
+                        className="w-full p-2 border rounded text-sm"
+                        placeholder="Phone number"
+                        />
+                    </div>
+                    </div>
                 </div>
               ))}
               <button
-                onClick={handleAddAssignee}
+                onClick={handleAddAssigneeToService}
                 className="text-sm text-primary-600 hover:text-primary-800"
               >
                 + Add Another Assignee
@@ -358,16 +436,148 @@ export default function BranchCard({
                     assignees: [{ name: "", email: "", phone: "" }]
                   });
                 }}
-                className="px-4 py-2 border rounded"
+                className="px-4 py-2 border rounded-full"
               >
                 Cancel
               </button>
               <button
                 onClick={handleAddService}
                 disabled={!newService.serviceId || !newService.assignees.some(a => a.name && a.email)}
-                className="px-4 py-2 bg-primary-600 text-white rounded disabled:bg-gray-300"
+                className="px-4 py-2 bg-primary-600 text-white rounded-full disabled:bg-gray-300"
               >
                 Add Service
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Service Details Modal */}
+      {showServiceModal && selectedService && (
+        <div className="fixed inset-0 bg-white/40 flex items-center justify-center z-50 p-4 backdrop-blur-xl">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="bg-primary-600 p-4 sticky top-0 z-10">
+              <div className="flex justify-between items-center">
+                <h2 className="text-xl font-bold text-white">{selectedService.name}</h2>
+                <button 
+                  onClick={() => {
+                    setShowServiceModal(false);
+                    setIsAddingAssignee(false);
+                  }}
+                  className="text-white hover:text-gray-200"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6">
+              {/* Assignees Section */}
+              <div className="mb-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-semibold">Assignees</h3>
+                  <button
+                    onClick={() => setIsAddingAssignee(true)}
+                    className="text-primary-600 hover:text-primary-800 text-sm flex items-center gap-1"
+                  >
+                    <PlusIcon className="h-4 w-4" />
+                    Add Assignee
+                  </button>
+                </div>
+
+                {/* Add Assignee Form */}
+                {isAddingAssignee && (
+                  <div className="bg-primary-400 p-4 rounded-lg mb-6 border border-primary-200">
+                    <h4 className="font-medium mb-3">New Assignee Details</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                      <input
+                        type="text"
+                        placeholder="Full Name"
+                        className="p-2 border rounded w-full"
+                        value={newAssignee.name}
+                        onChange={(e) => setNewAssignee({...newAssignee, name: e.target.value})}
+                      />
+                      <input
+                        type="email"
+                        placeholder="Email"
+                        className="p-2 border rounded w-full"
+                        value={newAssignee.email}
+                        onChange={(e) => setNewAssignee({...newAssignee, email: e.target.value})}
+                      />
+                      <input
+                        type="tel"
+                        placeholder="Phone Number"
+                        className="p-2 border rounded w-full"
+                        value={newAssignee.phone}
+                        onChange={(e) => setNewAssignee({...newAssignee, phone: e.target.value})}
+                      />
+                    </div>
+                    <div className="flex gap-2 items-center justify-end w-full">
+                      <button
+                        onClick={() => {
+                          setIsAddingAssignee(false);
+                          setNewAssignee({ name: "", email: "", phone: "" });
+                        }}
+                        className="px-4 py-2 border rounded-full"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={handleAddAssignee}
+                        disabled={!newAssignee.name || !newAssignee.email}
+                        className="px-4 py-2 bg-primary-600 text-white rounded-full disabled:bg-gray-300"
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Assignees List */}
+                <div className="space-y-3">
+                  {selectedService.assignees.map((assignee) => (
+                    <div key={assignee.id} className="flex justify-between items-center p-3 border rounded-lg">
+                      <div>
+                        <p className="font-medium">{assignee.name}</p>
+                        <p className="text-sm text-gray-600">{assignee.email}</p>
+                        <p className="text-sm text-gray-600">{assignee.phone}</p>
+                      </div>
+                      <button
+                        onClick={() => removeAssignee(assignee.id)}
+                        className="text-red-600 hover:text-red-800 p-2"
+                      >
+                        <TrashIcon className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Remove Service Confirmation Modal */}
+      {showRemoveConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Confirm Removal</h2>
+            <p className="mb-6">Are you sure you want to remove this service from the branch?</p>
+            
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowRemoveConfirm(false)}
+                className="px-4 py-2 border rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRemoveService}
+                className="px-4 py-2 bg-red-600 text-white rounded"
+              >
+                Remove Service
               </button>
             </div>
           </div>
