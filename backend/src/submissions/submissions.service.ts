@@ -30,8 +30,6 @@ export class SubmissionsService extends BaseService {
     super();
   }
 
-  // No longer needed as we'll use BaseService methods directly
-
   async findAll(
     status?: SubmissionStatus,
     citizenId?: string,
