@@ -6,6 +6,7 @@ import { BlurredDiv, ListItem, ReservationListItem, CitizenHeader } from "@myorg
 
 export default function GovernmentDepartments() {
   const [showAll, setShowAll] = useState(false);
+  const [selectedDepartment, setSelectedDepartment] = useState<{ id: string; text: string; icon: React.ReactNode } | null>(null);
 
   const departments = [
     {
@@ -70,6 +71,10 @@ export default function GovernmentDepartments() {
     setShowAll(!showAll);
   };
 
+  const handleDepartmentClick = (department: { id: string; text: string; icon: React.ReactNode }) => {
+    setSelectedDepartment(department);
+  };
+
   return (
     <div className="min-h-screen relative">
       {/* Background Image */}
@@ -129,12 +134,32 @@ export default function GovernmentDepartments() {
                   }}
                 >
                   {displayedDepartments.map((department) => (
-                    <ListItem
-                      key={department.id}
-                      icon={department.icon}
-                      text={department.text}
-                      onClick={() => console.log(`Clicked on ${department.text}`)}
-                    />
+                    <div key={department.id}>
+                      <ListItem
+                        icon={department.icon}
+                        text={department.text}
+                        onClick={() => handleDepartmentClick(department)}
+                      />
+                      {/* Show buttons below the selected department */}
+                      {selectedDepartment?.id === department.id && (
+                        <div className="mt-3 p-4 bg-white rounded-lg shadow-md border border-gray-200">
+                          <div className="flex gap-3 justify-center">
+                            <Link 
+                              href="/services"
+                              className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                            >
+                              Services
+                            </Link>
+                            <Link 
+                              href="/services"
+                              className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+                            >
+                              Bungalow Bookings
+                            </Link>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   ))}
                 </div>
                 
@@ -170,15 +195,36 @@ export default function GovernmentDepartments() {
                   }}
                 >
                   {displayedDepartments.map((department) => (
-                    <ListItem
-                      key={department.id}
-                      icon={department.icon}
-                      text={department.text}
-                      onClick={() => console.log(`Clicked on ${department.text}`)}
-                    />
+                    <div key={department.id}>
+                      <ListItem
+                        icon={department.icon}
+                        text={department.text}
+                        onClick={() => handleDepartmentClick(department)}
+                      />
+                      {/* Show buttons below the selected department */}
+                      {selectedDepartment?.id === department.id && (
+                        <div className="mt-3 p-4">
+                          <div className="flex gap-3 justify-center">
+                            <Link 
+                              href="/services"
+                              className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                            >
+                              Services
+                            </Link>
+                            <Link 
+                              href="/services"
+                              className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+                            >
+                              Bungalow Bookings
+                            </Link>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   ))}
                 </div>
-                
+
+                {/* department buttons */}
                 {departments.length > 3 && (
                   <div className="flex justify-center py-4">
                     <button 
