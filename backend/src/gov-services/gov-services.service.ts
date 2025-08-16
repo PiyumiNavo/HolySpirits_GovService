@@ -14,9 +14,10 @@ export class GovServicesService extends BaseService {
     super();
   }
 
-  async findAll(departmentId?: string): Promise<ServiceDocument[]> {
+  async findAll(departmentId?: string) {
     const query = departmentId ? { departmentId } : {};
-    return this.serviceModel.find(query).exec();
+    const services = await this.serviceModel.find(query).exec();
+    return this.success(services, 'Services retrieved successfully');
   }
 
   async findById(id: Types.ObjectId | string): Promise<ServiceDocument> {
@@ -27,21 +28,27 @@ export class GovServicesService extends BaseService {
     return service;
   }
 
+  async getServiceById(id: Types.ObjectId | string) {
+    const service = await this.findById(id);
+    return this.success(service, 'Service retrieved successfully');
+  }
+
   async create(
     createServiceDto: CreateServiceDto,
     createdByUserId: Types.ObjectId | string,
-  ): Promise<ServiceDocument> {
+  ) {
     const newService = new this.serviceModel({
       ...createServiceDto,
       createdBy: createdByUserId,
     });
-    return newService.save();
+    const service = await newService.save();
+    return this.success(service, 'Service created successfully');
   }
 
   async update(
     id: Types.ObjectId | string,
     updateData: Partial<CreateServiceDto>,
-  ): Promise<ServiceDocument> {
+  ) {
     const updatedService = await this.serviceModel
       .findByIdAndUpdate(id, updateData, { new: true })
       .exec();
@@ -50,20 +57,20 @@ export class GovServicesService extends BaseService {
       throw new NotFoundException(`Service with ID ${id.toString()} not found`);
     }
 
-    return updatedService;
+    return this.success(updatedService, 'Service updated successfully');
   }
 
-  async delete(id: Types.ObjectId | string): Promise<ServiceDocument> {
+  async delete(id: Types.ObjectId | string) {
     const deletedService = await this.serviceModel.findByIdAndDelete(id).exec();
 
     if (!deletedService) {
       throw new NotFoundException(`Service with ID ${id.toString()} not found`);
     }
 
-    return deletedService;
+    return this.success(deletedService, 'Service deleted successfully');
   }
 
-  async publishService(id: Types.ObjectId | string): Promise<ServiceDocument> {
+  async publishService(id: Types.ObjectId | string) {
     const updatedService = await this.serviceModel
       .findByIdAndUpdate(id, { isPublished: true }, { new: true })
       .exec();
@@ -72,12 +79,10 @@ export class GovServicesService extends BaseService {
       throw new NotFoundException(`Service with ID ${id.toString()} not found`);
     }
 
-    return updatedService;
+    return this.success(updatedService, 'Service published successfully');
   }
 
-  async unpublishService(
-    id: Types.ObjectId | string,
-  ): Promise<ServiceDocument> {
+  async unpublishService(id: Types.ObjectId | string) {
     const updatedService = await this.serviceModel
       .findByIdAndUpdate(id, { isPublished: false }, { new: true })
       .exec();
@@ -86,16 +91,15 @@ export class GovServicesService extends BaseService {
       throw new NotFoundException(`Service with ID ${id.toString()} not found`);
     }
 
-    return updatedService;
+    return this.success(updatedService, 'Service unpublished successfully');
   }
 
-  async getPublishedServices(
-    departmentId?: string,
-  ): Promise<ServiceDocument[]> {
+  async getPublishedServices(departmentId?: string) {
     const query = departmentId
       ? { departmentId, isPublished: true }
       : { isPublished: true };
 
-    return this.serviceModel.find(query).exec();
+    const services = await this.serviceModel.find(query).exec();
+    return this.success(services, 'Published services retrieved successfully');
   }
 }

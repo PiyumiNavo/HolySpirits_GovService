@@ -26,7 +26,7 @@ import {
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
-import { RequestWithUser } from '../auth/interfaces/request-with-user.interface';
+import type { RequestWithUser } from '../auth/interfaces/request-with-user.interface';
 import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('Government Services')
@@ -57,14 +57,11 @@ export class GovServicesController {
     @Query('departmentId') departmentId?: string,
     @Query('published') published?: string,
   ) {
-    let services;
     if (published === 'true') {
-      services =
-        await this.govServicesService.getPublishedServices(departmentId);
+      return this.govServicesService.getPublishedServices(departmentId);
     } else {
-      services = await this.govServicesService.findAll(departmentId);
+      return this.govServicesService.findAll(departmentId);
     }
-    return this.govServicesService.success(services);
   }
 
   @Get(':id')
@@ -78,10 +75,7 @@ export class GovServicesController {
   })
   @ApiResponse({ status: 404, description: 'Service not found' })
   async findOne(@Param('id') id: string) {
-    const service = await this.govServicesService.findById(
-      new Types.ObjectId(id),
-    );
-    return this.govServicesService.success(service);
+    return this.govServicesService.getServiceById(new Types.ObjectId(id));
   }
 
   @Post()
@@ -101,11 +95,7 @@ export class GovServicesController {
     @Body() createServiceDto: CreateServiceDto,
     @Request() req: RequestWithUser,
   ) {
-    const createdService = await this.govServicesService.create(
-      createServiceDto,
-      req.user._id,
-    );
-    return this.govServicesService.success(createdService);
+    return this.govServicesService.create(createServiceDto, req.user._id);
   }
 
   @Put(':id')
@@ -127,11 +117,10 @@ export class GovServicesController {
     @Param('id') id: string,
     @Body() updateServiceDto: CreateServiceDto,
   ) {
-    const updatedService = await this.govServicesService.update(
+    return this.govServicesService.update(
       new Types.ObjectId(id),
       updateServiceDto,
     );
-    return this.govServicesService.success(updatedService);
   }
 
   @Delete(':id')
@@ -149,10 +138,7 @@ export class GovServicesController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Service not found' })
   async remove(@Param('id') id: string) {
-    const deletedService = await this.govServicesService.delete(
-      new Types.ObjectId(id),
-    );
-    return this.govServicesService.success(deletedService);
+    return this.govServicesService.delete(new Types.ObjectId(id));
   }
 
   @Put(':id/publish')
@@ -170,10 +156,7 @@ export class GovServicesController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Service not found' })
   async publishService(@Param('id') id: string) {
-    const publishedService = await this.govServicesService.publishService(
-      new Types.ObjectId(id),
-    );
-    return this.govServicesService.success(publishedService);
+    return this.govServicesService.publishService(new Types.ObjectId(id));
   }
 
   @Put(':id/unpublish')
@@ -191,9 +174,6 @@ export class GovServicesController {
   @ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiResponse({ status: 404, description: 'Service not found' })
   async unpublishService(@Param('id') id: string) {
-    const unpublishedService = await this.govServicesService.unpublishService(
-      new Types.ObjectId(id),
-    );
-    return this.govServicesService.success(unpublishedService);
+    return this.govServicesService.unpublishService(new Types.ObjectId(id));
   }
 }

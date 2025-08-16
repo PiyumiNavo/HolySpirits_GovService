@@ -54,8 +54,15 @@ export class SubmissionsService extends BaseService {
 
     if (departmentId) {
       // Get all services for the department
-      const services = await this.govServicesService.findAll(departmentId);
-      const serviceIds = services.map((service) => service._id);
+      const servicesResponse =
+        await this.govServicesService.findAll(departmentId);
+      // Extract services from response and ensure they have the correct type
+      const services = servicesResponse.data as Array<{
+        _id: Types.ObjectId | string;
+      }>;
+      const serviceIds: (Types.ObjectId | string)[] = services.map(
+        (service) => service._id,
+      );
       query.serviceId = { $in: serviceIds };
     }
 
