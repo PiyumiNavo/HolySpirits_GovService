@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { DepartmentHeader, Button, BranchCard } from "@myorg/ui";
 import { useParams } from "next/navigation";
-import { ObjectId, Types } from "mongoose";
 
 // Define the Department type with _id as string
 interface Department {

@@ -86,11 +86,11 @@ const initbranches = [
   }
 ];
 interface ServicePageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export default function ServicePage({ params }: ServicePageProps) {
-  const serviceId = params.id;
+export default async function ServicePage({ params }: ServicePageProps) {
+  const { id: serviceId } = await params;
   const title = "Registration of Motor Bikes";
   const imageUrl = "/bicycle.jpg";
 
