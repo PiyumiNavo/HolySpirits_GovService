@@ -223,7 +223,8 @@ export default function GovernmentDepartments() {
                     </div>
                   ))}
                 </div>
-                
+
+                {/* department buttons */}
                 {departments.length > 3 && (
                   <div className="flex justify-center py-4">
                     <button 
