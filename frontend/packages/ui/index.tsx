@@ -15,3 +15,5 @@ export { default as Select } from "./components/Select";
 export { default as Checkbox } from "./components/Checkbox";
 export { default as TextArea } from "./components/TextArea";
 export { default as SelectableBranchCard } from "./components/SelectableBranchCard";
+export { default as DepartmentHeader } from "./components/DepartmentHeader";
+export { default as DepartmentList } from "./components/DepartmentList";
