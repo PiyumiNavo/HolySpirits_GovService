@@ -1,7 +1,7 @@
 'use client';
 import { useState } from "react";
 import Image from "next/image";
-import { SearchBar, CitizenHeader } from "@myorg/ui";
+import { SearchBar, CitizenHeader, Heading } from "@myorg/ui";
 
 export default function BungalowsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -63,7 +63,7 @@ export default function BungalowsPage() {
       {/* Header */}
       <CitizenHeader logoSrc="/logo.png" />
       
-      <div className="px-4 pt-6">
+      <div className="px-4">
         {/* Search Bar */}
         <div className="mb-8">
           <div className="relative max-w-2xl mx-auto">
@@ -96,9 +96,15 @@ export default function BungalowsPage() {
 
         {/* Department Title */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-800">
+          <Heading 
+            level={1}
+            color="gray"
+            size="xl"
+            align="center"
+            weight="bold"
+          >
             Ministry of Public Administration,<br />Provincial Councils
-          </h1>
+          </Heading>
         </div>
 
         {/* Bungalows Grid */}
