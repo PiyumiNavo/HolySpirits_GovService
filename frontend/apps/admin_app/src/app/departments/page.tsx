@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { DepartmentHeader, SearchBar, Button, DepartmentList, LoadingSkeleton, Card } from "@myorg/ui";
+import { DepartmentHeader, SearchBar, Button, DepartmentList, LoadingSkeleton, Card, PlatformHeader } from "@myorg/ui";
 import { useAuth } from "../../hooks/useAuth";
 import { useDepartments } from "../../hooks/useDepartments";
 import ProtectedRoute from "../../components/ProtectedRoute";
@@ -49,7 +49,7 @@ export default function DepartmentsPage() {
     <ProtectedRoute>
       <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen gap-16">
         <div className="w-full">
-          <DepartmentHeader departmentName={`Welcome, ${user?.name || 'Admin'}`} />
+          <PlatformHeader departmentName={`Welcome, ${user?.name || 'Admin'}`} />
           <div className="flex justify-end px-4 mt-2">
             <Button variant="outline" onClick={handleLogout}>
               Logout

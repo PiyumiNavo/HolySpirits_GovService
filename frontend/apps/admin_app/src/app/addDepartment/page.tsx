@@ -2,7 +2,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { DepartmentHeader, Card, AddDepartmentForm } from "@myorg/ui";
+import { DepartmentHeader, Card, AddDepartmentForm, PlatformHeader } from "@myorg/ui";
 import { useAuth } from "../../hooks/useAuth";
 import departmentService from "../../services/department.service";
 import ProtectedRoute from "../../components/ProtectedRoute";
@@ -165,7 +165,7 @@ export default function AddDepartmentPage() {
   return (
     <ProtectedRoute>
       <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen gap-16">
-        <DepartmentHeader departmentName="Add New Department" />
+        <PlatformHeader departmentName="Add New Department" />
 
         <main className="w-full row-start-2 container mx-auto px-4">
           <Card padding="lg" shadow="md" className="max-w-4xl mx-auto">

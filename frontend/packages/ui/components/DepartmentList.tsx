@@ -12,7 +12,7 @@ interface DepartmentListProps {
 
 export default function DepartmentList({ departments }: DepartmentListProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
       {departments.length > 0 ? (
         departments.map((dept) => (
           <DepartmentCard
