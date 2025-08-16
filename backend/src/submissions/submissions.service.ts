@@ -18,6 +18,7 @@ import {
 } from './dto/submission.dto';
 import { BaseService } from '../common/services/base.service';
 import { GovServicesService } from '../gov-services/gov-services.service';
+import { SubmissionQuery, AppointmentQueryConditions } from './interfaces';
 
 @Injectable()
 export class SubmissionsService extends BaseService {
@@ -40,7 +41,7 @@ export class SubmissionsService extends BaseService {
     serviceId?: string,
     departmentId?: string,
   ): Promise<SubmissionDocument[]> {
-    const query: any = {};
+    const query: SubmissionQuery = {};
 
     if (status) {
       query.status = status;
@@ -85,13 +86,16 @@ export class SubmissionsService extends BaseService {
     if (createSubmissionDto.appointment) {
       const { date, startTime, endTime, locationId } =
         createSubmissionDto.appointment;
+
+      const appointmentQuery: AppointmentQueryConditions = {
+        'appointment.date': date,
+        'appointment.startTime': startTime,
+        'appointment.endTime': endTime,
+        'appointment.locationId': locationId,
+      };
+
       const existingAppointment = await this.submissionModel
-        .findOne({
-          'appointment.date': date,
-          'appointment.startTime': startTime,
-          'appointment.endTime': endTime,
-          'appointment.locationId': locationId,
-        })
+        .findOne(appointmentQuery)
         .exec();
 
       if (existingAppointment) {
