@@ -9,6 +9,7 @@ interface BranchCardProps {
   counterCount: number;
   assigneeCount: number;
   onClick?: (id: number) => void;
+  onViewSubmissions?: (id: number) => void;
 }
 
 export default function BranchCard({
@@ -18,11 +19,19 @@ export default function BranchCard({
   counterCount = 5,
   assigneeCount = 12,
   onClick,
+  onViewSubmissions,
 }: BranchCardProps) {
   
   const handleClick = () => {
     if (onClick) {
       onClick(id);
+    }
+  };
+
+  const handleViewSubmissions = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click
+    if (onViewSubmissions) {
+      onViewSubmissions(id);
     }
   };
   
@@ -70,6 +79,18 @@ export default function BranchCard({
             <span className="font-medium text-sm sm:text-base">{assigneeCount} Assignees</span>
           </div>
         </div>
+        
+        {/* Action Button */}
+        {onViewSubmissions && (
+          <div className="mt-4 pt-3 border-t border-gray-100">
+            <button
+              onClick={handleViewSubmissions}
+              className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
+            >
+              View Submissions
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

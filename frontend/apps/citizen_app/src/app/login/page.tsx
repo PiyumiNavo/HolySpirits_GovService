@@ -77,7 +77,7 @@ export default function LoginPage() {
                 
                 <div className="pt-4">
                   <Link href="/government-departments" passHref>
-                    <Button>
+                    <Button className="w-full">
                       Login
                     </Button>
                   </Link>
