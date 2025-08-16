@@ -1,31 +1,33 @@
-# Use a Node.js base image
-FROM node:18-alpine
+# Base image
+FROM node:18-alpine AS base
 
-# Set the working directory inside the container
+# Install dependencies only when needed
+FROM base AS deps
 WORKDIR /app
 
-# Copy package.json files
-COPY package.json ./
-COPY packages/ui/package.json ./packages/ui/
+COPY package.json yarn.lock ./
 COPY apps/department_app/package.json ./apps/department_app/
+COPY packages/ui/package.json ./packages/ui/
 
-# Install dependencies
-RUN npm install --legacy-peer-deps
+RUN yarn install --frozen-lockfile
 
-# Copy the rest of the application code
-COPY . .
+# Build
+FROM deps AS builder
+WORKDIR /app
+COPY . . 
+RUN yarn workspace department_app build
 
-# Build the Next.js application
-WORKDIR /app/apps/department_app
-RUN npm run build
+# Production
+FROM base AS runner
+WORKDIR /app
 
-# Expose the port the app runs on
-EXPOSE 3002
-
-# Set environment variables
-ENV PORT=3002
-ENV HOSTNAME="0.0.0.0"
 ENV NODE_ENV=production
+ENV PORT=3002
 
-# Start the Next.js application
-CMD ["npm", "start"]
+COPY --from=builder /app/apps/department_app/.next ./.next
+COPY --from=builder /app/apps/department_app/package.json ./ 
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/packages/ui ./packages/ui
+
+EXPOSE 3002
+CMD ["yarn", "workspace", "department_app", "start"]

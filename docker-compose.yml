@@ -1,5 +1,4 @@
 services:
-
   mongodb:
     image: mongo:6
     ports:
@@ -39,8 +38,8 @@ services:
       dockerfile: ./apps/citizen_app/Dockerfile
     ports:
       - "3001:3001"
-    depends_on:
-      - backend
+    # depends_on:
+    #   - backend
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:3000
 
