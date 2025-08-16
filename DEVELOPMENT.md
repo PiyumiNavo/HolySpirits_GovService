@@ -24,7 +24,7 @@ To start all services at once:
 .\start-dev.ps1
 
 # Alternatively, use Docker Compose directly with the dev configuration
-docker-compose -f docker-compose.dev.yml up
+docker-compose -f docker-compose.yml up
 ```
 
 This will start all services in Docker containers, and they will be accessible at:
@@ -53,7 +53,7 @@ When working with Docker, any changes to the code require rebuilding the contain
 
 ```bash
 # Rebuild a specific service
-docker-compose -f docker-compose.dev.yml build backend
+docker-compose -f docker-compose.yml build backend
 
 # Restart a specific service
 docker-compose up -d --no-deps backend
@@ -64,11 +64,11 @@ docker-compose up -d --no-deps backend
 To view the logs of a specific service:
 
 ```bash
-docker-compose -f docker-compose.dev.yml logs -f backend
-docker-compose -f docker-compose.dev.yml logs -f citizen_frontend_dev
-docker-compose -f docker-compose.dev.yml logs -f department_frontend_dev
-docker-compose -f docker-compose.dev.yml logs -f admin_frontend_dev
-docker-compose -f docker-compose.dev.yml logs -f mongodb
+docker-compose -f docker-compose.yml logs -f backend
+docker-compose -f docker-compose.yml logs -f citizen_frontend_dev
+docker-compose -f docker-compose.yml logs -f department_frontend_dev
+docker-compose -f docker-compose.yml logs -f admin_frontend_dev
+docker-compose -f docker-compose.yml logs -f mongodb
 ```
 
 ## Stopping All Services
@@ -76,11 +76,11 @@ docker-compose -f docker-compose.dev.yml logs -f mongodb
 To stop all services:
 
 ```bash
-docker-compose -f docker-compose.dev.yml down
+docker-compose -f docker-compose.yml down
 ```
 
 To stop all services and remove volumes (this will delete database data):
 
 ```bash
-docker-compose -f docker-compose.dev.yml down -v
+docker-compose -f docker-compose.yml down -v
 ```

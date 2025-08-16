@@ -5,19 +5,12 @@ FROM node:18-alpine
 WORKDIR /app
 
 # Copy package.json files
-COPY package.json ./
-COPY packages/ui/package.json ./packages/ui/
-COPY apps/citizen_app/package.json ./apps/citizen_app/
-
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application code
-COPY . .
+COPY --chmod=0755 . .
 
 # Build the Next.js application
 WORKDIR /app/apps/citizen_app
-RUN npm run build
+RUN npm install
+RUN npm run dev
 
 # Expose the port the app runs on
 EXPOSE 3001
