@@ -1,4 +1,7 @@
+'use client';
+
 import React from "react";
+import { useRouter, useParams } from "next/navigation";
 import { Card, StatusBadge, Button } from "@myorg/ui";
 import { Submission } from "../types/submission.types";
 
@@ -11,6 +14,9 @@ export default function SubmissionCard({
   submission, 
   onUpdate 
 }: SubmissionCardProps) {
+  const router = useRouter();
+  const params = useParams();
+  
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
@@ -33,8 +39,9 @@ export default function SubmissionCard({
   };
 
   const handleViewDetails = () => {
-    // TODO: Navigate to submission details page or open modal
-    console.log(`Viewing details for submission ${submission.id}`);
+    // Navigate to submission details page
+    const detailsUrl = `/services/${params.id}/branch/${params.branch_id}/submissions/${submission.id}`;
+    router.push(detailsUrl);
   };
 
   return (
