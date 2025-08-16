@@ -7,6 +7,7 @@ interface DepartmentCardProps {
   icon?: React.ReactNode;
   serviceID?: Number;
   imageUrl?: string;
+  customUrl?: string;
 }
 
 export default function DepartmentCard({
@@ -14,12 +15,17 @@ export default function DepartmentCard({
   icon = <DefaultIcon />,
   serviceID,
   imageUrl,
+  customUrl,
   }: DepartmentCardProps) {
 
     const router = useRouter();
 
     const navigateToService = () => {
-      router.push(`/services/${serviceID}`);
+      if (customUrl) {
+        router.push(customUrl);
+      } else {
+        router.push(`/services/${serviceID}`);
+      }
     };
 
     return (
