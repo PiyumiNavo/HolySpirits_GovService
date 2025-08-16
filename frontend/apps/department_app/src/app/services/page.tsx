@@ -188,11 +188,11 @@ export default function Services() {
         <main className="flex flex-col w-full gap-[32px] row-start-2 items-start sm:items-start p-12">
 
             <div className="flex flex-col gap-2 w-full">
-            <SearchBar 
-                placeholder="Search for services..."
-                onSearch={setSearchQuery}
-            >
-            </SearchBar>
+              <SearchBar 
+                  placeholder="Search for services..."
+                  onSearch={setSearchQuery}
+              >
+              </SearchBar>
             </div>
 
             {filteredServices.length > 0 ? (
@@ -212,7 +212,11 @@ export default function Services() {
                     <p className="text-text-700">No items found matching "{searchQuery}"</p>
                 </div>
             )}
-            <Button>Add New Service</Button>
+            <Button>
+                <a href="/services/new" className="block w-full">
+                    Add New Service
+                </a>
+            </Button>
 
         </main>
         
