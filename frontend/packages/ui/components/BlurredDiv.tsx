@@ -8,7 +8,9 @@ export default function BlurredDiv({ children }: { children?: React.ReactNode })
         background: 'rgba(192, 226, 236, 0.07)',
         borderTopLeftRadius: '50px',
         borderTopRightRadius: '50px',
-        backdropFilter: 'blur(10px)'
+        backdropFilter: 'blur(10px)',
+        maxHeight: '55vh',
+        height: 'auto'
       }}
     >
       {children}
