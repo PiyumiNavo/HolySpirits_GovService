@@ -4,14 +4,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { FormDiv, Button, InputField } from "@myorg/ui";
 
-export default function LoginPage() {
+export default function SigninPage() {
   const [nic, setNic] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSignin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Login:", { nic, password });
+    // Handle signin logic here
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+    console.log("Signin:", { nic, password });
   };
 
   return (
@@ -33,10 +38,10 @@ export default function LoginPage() {
           <FormDiv>
             <div className="w-full space-y-6">
               <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">
-                Login
+                Sign Up
               </h1>
               
-              <form onSubmit={handleLogin} className="space-y-4" suppressHydrationWarning={true}>
+              <form onSubmit={handleSignin} className="space-y-4" suppressHydrationWarning={true}>
                 {[
                   {
                     id: "nic",
@@ -54,6 +59,15 @@ export default function LoginPage() {
                     value: password,
                     onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value),
                     placeholder: "Enter your password",
+                    required: true
+                  },
+                  {
+                    id: "confirmPassword",
+                    label: "Confirm Password",
+                    type: "password",
+                    value: confirmPassword,
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value),
+                    placeholder: "Confirm your password",
                     required: true
                   }
                 ].map((field) => (
@@ -80,9 +94,9 @@ export default function LoginPage() {
               
               <div className="text-center pt-4">
                 <p className="text-sm text-gray-600">
-                  Don't have an account?{" "}
-                  <Link href="/signup" className="text-blue-600 hover:text-blue-800 font-medium">
-                    Sign up
+                  Already have an account?{" "}
+                  <Link href="/login" className="text-blue-600 hover:text-blue-800 font-medium">
+                    Login
                   </Link>
                 </p>
               </div>

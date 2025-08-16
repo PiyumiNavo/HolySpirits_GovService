@@ -221,6 +221,7 @@ const ServiceSchema = new mongoose.Schema(
     processingTime: { type: Number }, // In days
   },
   { timestamps: true },
+  }
 );
 
 // Submission Schema with Appointment Conflict Handling
