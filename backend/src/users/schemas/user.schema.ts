@@ -86,9 +86,12 @@ export class User {
   @Prop({
     type: MongooseSchema.Types.ObjectId,
     ref: 'Department',
-    required: function (this: User) {
-      return this.role !== UserRole.CITIZEN;
-    },
+    // required: function (this: User) {
+    //   // Only department admins and staff require a departmentId
+    //   return (
+    //     this.role === UserRole.DEPT_ADMIN || this.role === UserRole.DEPT_STAFF
+    //   );
+    // },
   })
   departmentId?: Types.ObjectId;
 
