@@ -1,18 +1,30 @@
 services:
 
+  mongodb:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    # depends_on:
-    #   postgres:
-    #     condition: service_healthy
+    depends_on:
+      mongodb:
+        condition: service_healthy
     environment:
-      DATABASE_URL: ${DATABASE_URL}
       NODE_ENV: development
-      MONGO_URI: ${MONGO_URI:-mongodb://localhost:27017/e-gov}
+      MONGO_URI: ${MONGO_URI:-mongodb://mongodb:27017/e-gov}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@egov.lk}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@123}
       CREATE_TEST_USERS: ${CREATE_TEST_USERS:-true}
@@ -21,17 +33,20 @@ services:
       - ./backend:/app
       - /app/node_modules
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "5173:5173"
-    depends_on:
-      - backend
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    environment:
-      VITE_API_URL: http://localhost:3000
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "5173:5173"
+  #   depends_on:
+  #     - backend
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+  #   environment:
+  #     VITE_API_URL: http://localhost:3000
 
+volumes:
+  mongodb_data:
+    driver: local
