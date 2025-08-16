@@ -209,7 +209,7 @@ const initialBranches: Branch[] = [
 export default function DepartmentBranches() {
   const [searchQuery, setSearchQuery] = useState("");
   const [branches, setBranches] = useState<Branch[]>(initialBranches);
-  const [showServiceModal, setShowServiceModal] = useState(false);
+  // const [showServiceModal, setShowServiceModal] = useState(false);
   const [currentBranchId, setCurrentBranchId] = useState<number | null>(null);
   const [newService, setNewService] = useState({
     serviceId: "",
@@ -254,7 +254,7 @@ export default function DepartmentBranches() {
 
   const handleAddServiceClick = (branchId: number) => {
     setCurrentBranchId(branchId);
-    setShowServiceModal(true);
+    // setShowServiceModal(true);
   };
 
   const handleRemoveService = (branchId: number, serviceId: number) => {
@@ -270,57 +270,57 @@ export default function DepartmentBranches() {
     );
   };
 
-  const handleServiceSubmit = () => {
-    if (!currentBranchId || !newService.serviceId) return;
+  // const handleServiceSubmit = () => {
+  //   if (!currentBranchId || !newService.serviceId) return;
 
-    const selectedService = allAvailableServices.find(
-      s => s.id === parseInt(newService.serviceId)
-    );
+  //   const selectedService = allAvailableServices.find(
+  //     s => s.id === parseInt(newService.serviceId)
+  //   );
 
-    if (!selectedService) return;
+  //   if (!selectedService) return;
 
-    const newServiceWithAssignees: Service = {
-      id: selectedService.id,
-      name: selectedService.name,
-      assignees: newService.assignees
-        .filter(a => a.name && a.email)
-        .map(a => ({
-          ...a,
-          id: Date.now() + Math.random()
-        }))
-    };
+  //   const newServiceWithAssignees: Service = {
+  //     id: selectedService.id,
+  //     name: selectedService.name,
+  //     assignees: newService.assignees
+  //       .filter(a => a.name && a.email)
+  //       .map(a => ({
+  //         ...a,
+  //         id: Date.now() + Math.random()
+  //       }))
+  //   };
 
-    setBranches(branches.map(branch => 
-      branch.id === currentBranchId
-        ? {
-            ...branch,
-            services: [...branch.services, newServiceWithAssignees]
-          }
-        : branch
-    ));
+  //   setBranches(branches.map(branch => 
+  //     branch.id === currentBranchId
+  //       ? {
+  //           ...branch,
+  //           services: [...branch.services, newServiceWithAssignees]
+  //         }
+  //       : branch
+  //   ));
 
-    setShowServiceModal(false);
-    setNewService({
-      serviceId: "",
-      assignees: [{ name: "", email: "", phone: "" }]
-    });
-  };
+  //   // setShowServiceModal(false);
+  //   setNewService({
+  //     serviceId: "",
+  //     assignees: [{ name: "", email: "", phone: "" }]
+  //   });
+  // };
 
-  const handleAddAssignee = () => {
-    setNewService(prev => ({
-      ...prev,
-      assignees: [...prev.assignees, { name: "", email: "", phone: "" }]
-    }));
-  };
+  // const handleAddAssignee = () => {
+  //   setNewService(prev => ({
+  //     ...prev,
+  //     assignees: [...prev.assignees, { name: "", email: "", phone: "" }]
+  //   }));
+  // };
 
-  const handleAssigneeChange = (index: number, field: string, value: string) => {
-    const updatedAssignees = [...newService.assignees];
-    updatedAssignees[index] = {
-      ...updatedAssignees[index],
-      [field]: value
-    };
-    setNewService({ ...newService, assignees: updatedAssignees });
-  };
+  // const handleAssigneeChange = (index: number, field: string, value: string) => {
+  //   const updatedAssignees = [...newService.assignees];
+  //   updatedAssignees[index] = {
+  //     ...updatedAssignees[index],
+  //     [field]: value
+  //   };
+  //   setNewService({ ...newService, assignees: updatedAssignees });
+  // };
 
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-start justify-items-center min-h-screen gap-8">
@@ -371,7 +371,7 @@ export default function DepartmentBranches() {
         )}
 
         {/* Add Service Modal */}
-        {showServiceModal && (
+        {/* {showServiceModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg p-6 w-full max-w-md">
               <h2 className="text-xl font-bold mb-4">Add New Service</h2>
@@ -463,7 +463,7 @@ export default function DepartmentBranches() {
               </div>
             </div>
           </div>
-        )}
+        )} */}
       </main>
     </div>
   );
