@@ -4,6 +4,7 @@ interface InputFieldProps {
   id: string;
   label: string;
   type: string;
+  name?: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder: string;
@@ -15,7 +16,8 @@ interface InputFieldProps {
 export default function InputField({ 
   id, 
   label, 
-  type, 
+  type,
+  name,
   value, 
   onChange, 
   placeholder, 
@@ -32,6 +34,7 @@ export default function InputField({
       <input
         type={type}
         id={id}
+        name={name || id}
         value={value}
         onChange={onChange}
         className={`

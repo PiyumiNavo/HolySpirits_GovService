@@ -30,3 +30,4 @@ export { default as Pagination } from "./components/Pagination";
 export { default as MultiSelectFilter } from "./components/MultiSelectFilter";
 export { default as SearchInput } from "./components/SearchInput";
 export { default as LoadingSkeleton, SubmissionCardSkeleton } from "./components/LoadingSkeleton";
+export { default as PlatformHeader } from "./components/PlatformHeader"
