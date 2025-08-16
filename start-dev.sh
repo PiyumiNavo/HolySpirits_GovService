@@ -10,7 +10,7 @@ echo ""
 
 # Start all services
 echo "Starting all services..."
-docker-compose up -d
+docker-compose -f docker-compose.dev.yml up -d
 
 echo ""
 echo "Services are starting. You can access them at:"
