@@ -9,7 +9,7 @@ interface HeaderProps {
 }
 
 const navItems = [
-  { path: '/', name: 'Dashboard' },
+  { path: '/dashboard', name: 'Dashboard' },
   { path: '/services', name: 'Services' },
   { path: '/branches', name: 'Branches' }
 ];
@@ -37,7 +37,7 @@ export default function DepartmentHeader({ departmentName }: HeaderProps) {
         {/* Left - Logo */}
         <div className="flex items-center gap-2">
           <button
-            onClick={() => router.push('/')} 
+            onClick={() => router.push('/dashboard')} 
             className="flex items-center space-x-2">
             <svg
               className="h-4 w-4 text-primary-500"
@@ -69,7 +69,7 @@ export default function DepartmentHeader({ departmentName }: HeaderProps) {
             </svg>
           </button>
           <button
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/dashboard')}
             className="text-sm font-medium text-white hover:text-primary-500 transition-colors max-w-[300px]"
           >
             {departmentName}
