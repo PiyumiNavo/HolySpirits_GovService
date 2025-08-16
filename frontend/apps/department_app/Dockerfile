@@ -1,10 +1,10 @@
-FROM node:18-alpine AS base
+# Use a Node.js base image
+FROM node:18-alpine
 
-# Install dependencies only when needed
-FROM base AS deps
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy all package.json files and the workspace config
+# Copy package.json files
 COPY package.json ./
 COPY packages/ui/package.json ./packages/ui/
 COPY apps/department_app/package.json ./apps/department_app/
@@ -12,40 +12,20 @@ COPY apps/department_app/package.json ./apps/department_app/
 # Install dependencies
 RUN npm install --legacy-peer-deps
 
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# Copy the rest of the application code
 COPY . .
 
-# Fix for Next.js future version issue - temporarily replace version in package.json
-RUN sed -i 's/"next": "15.4.6"/"next": "13.5.4"/g' apps/department_app/package.json
-
-# Build the application
+# Build the Next.js application
 WORKDIR /app/apps/department_app
-RUN npm run build || echo "Build failed but continuing"
+RUN npm run build
 
-# Production image, copy all the files and run next
-FROM base AS runner
-WORKDIR /app
-
-ENV NODE_ENV=production
-
-# Create a non-root user
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-# Copy necessary files
-COPY --from=builder /app/apps/department_app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/apps/department_app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/department_app/.next/static ./.next/static
-
-USER nextjs
-
+# Expose the port the app runs on
 EXPOSE 3002
 
+# Set environment variables
 ENV PORT=3002
-# Set hostname to localhost
 ENV HOSTNAME="0.0.0.0"
+ENV NODE_ENV=production
 
-CMD ["node", "apps/department_app/server.js"]
+# Start the Next.js application
+CMD ["npm", "start"]
