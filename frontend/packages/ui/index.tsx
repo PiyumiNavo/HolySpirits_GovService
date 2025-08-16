@@ -6,7 +6,6 @@ export { default as FormDiv } from "./components/FormDiv";
 export { default as BlurredDiv } from "./components/BlurredDiv";
 export { default as InputField } from "./components/InputField";
 export { default as ListItem } from "./components/ListItem";
-export { default as ReservationListItem } from "./components/ReservationListItem";
 export { default as CitizenHeader } from "./components/CitizenHeader";
 export { default as Heading } from "./components/Heading";
 export { default as BranchCard } from "./components/BranchCard";

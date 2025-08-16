@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { BlurredDiv, ListItem, ReservationListItem, CitizenHeader } from "@myorg/ui";
+import { BlurredDiv, ListItem, CitizenHeader } from "@myorg/ui";
 
 export default function ServicesPage() {
   const [showAll, setShowAll] = useState(false);
@@ -166,20 +166,8 @@ export default function ServicesPage() {
         {/* Header */}
         <CitizenHeader logoSrc="/logo.png" />
         
-        <div className="flex-1 flex items-start justify-center pt-8">
-          <div className="w-full max-w-md">
-            {/* Reservation Item - Only show when not showing all departments */}
-            {!showAll && (
-              <ReservationListItem
-                title="Nuwara Eliya Rest House"
-                startDate="12 , Aug, 2025"
-                endDate="14, Aug, 2025"
-                dueDate="In 3 days"
-                guests={6}
-                nights={2}
-                onClick={() => console.log("Reservation clicked")}
-              />
-            )}
+        <div className="flex-1 flex items-start justify-center pt-8 px-4 pb-4">
+          <div className="w-full max-w-md mx-auto space-y-6">
           
           {/* Custom BlurredDiv for expanded view */}
           {showAll ? (
@@ -235,19 +223,20 @@ export default function ServicesPage() {
               </div>
             </div>
           ) : (
-            <BlurredDiv>
-              <div className="w-full space-y-6">
-                <h1 className="text-xl font-bold text-center text-white text-center max-w-sm pt-4">
-                  Browse through Government Services
-                </h1>
-                
-                <div 
-                  className="space-y-3"
-                  style={{
-                    maxHeight: displayedDepartments.length > 5 ? '400px' : 'auto',
-                    overflowY: displayedDepartments.length > 5 ? 'auto' : 'visible'
-                  }}
-                >
+            <div className="flex justify-center w-full">
+              <BlurredDiv>
+                <div className="w-full max-w-md space-y-6 flex flex-col items-center">
+                  <h1 className="text-xl font-bold text-center text-white pt-4">
+                    Browse through Government Services
+                  </h1>
+                  
+                  <div 
+                    className="space-y-3 w-full"
+                    style={{
+                      maxHeight: displayedDepartments.length > 5 ? '400px' : 'auto',
+                      overflowY: displayedDepartments.length > 5 ? 'auto' : 'visible'
+                    }}
+                  >
                   {displayedDepartments.map((department) => (
                     <div key={department.id}>
                       <ListItem
@@ -279,10 +268,11 @@ export default function ServicesPage() {
                 )}
               </div>
             </BlurredDiv>
+            </div>
           )}
+          </div>
         </div>
       </div>
     </div>
-  </div>
   );
 }
