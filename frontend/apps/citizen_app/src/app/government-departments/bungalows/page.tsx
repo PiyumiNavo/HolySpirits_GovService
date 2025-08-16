@@ -1,6 +1,7 @@
 'use client';
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { SearchBar, CitizenHeader, Heading } from "@myorg/ui";
 
 export default function BungalowsPage() {
@@ -110,27 +111,33 @@ export default function BungalowsPage() {
         {/* Bungalows Grid */}
         <div className="grid grid-cols-2 md:grid-cols-2 gap-3 max-w-4xl mx-auto pb-4">
           {bungalows.map((bungalow) => (
-            <div key={bungalow.id} className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
-              {/* Image Section */}
-              <div className="relative h-32">
-                <Image
-                  src={bungalow.image}
-                  alt={bungalow.name}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              
-              {/* Content Section */}
-              <div className="p-3 bg-gradient-to-r from-gray-800 to-gray-700 text-white">
-                <div className="text-xs text-gray-300 mb-1">{bungalow.location}</div>
-                <h3 className="font-bold text-sm mb-1">{bungalow.name}</h3>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold">{bungalow.price}</span>
-                  <span className="text-xs text-gray-300">{bungalow.staffNote}</span>
+            <Link 
+              key={bungalow.id}
+              href={`/government-departments/bungalows/${bungalow.id}`}
+              className="block group"
+            >
+              <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform group-hover:-translate-y-1">
+                {/* Image Section */}
+                <div className="relative h-32">
+                  <Image
+                    src={bungalow.image}
+                    alt={bungalow.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                
+                {/* Content Section */}
+                <div className="p-3 bg-gradient-to-r from-gray-800 to-gray-700 text-white group-hover:from-gray-700 group-hover:to-gray-600 transition-all duration-300">
+                  <div className="text-xs text-gray-300 mb-1">{bungalow.location}</div>
+                  <h3 className="font-bold text-sm mb-1">{bungalow.name}</h3>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold">{bungalow.price}</span>
+                    <span className="text-xs text-gray-300">{bungalow.staffNote}</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
