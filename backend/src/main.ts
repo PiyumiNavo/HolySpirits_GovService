@@ -7,11 +7,31 @@ import { ResponseTransformerInterceptor } from './common/interceptors/response-t
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS
+  // Get CORS origins from environment variable or use defaults
+  const corsOrigins = process.env.CORS_ORIGINS 
+    ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim())
+    : [
+        'http://localhost:3001', // Citizen app
+        'http://localhost:3002', // Department app  
+        'http://localhost:3003', // Admin app
+        'http://127.0.0.1:3001', // Citizen app (alternative localhost)
+        'http://127.0.0.1:3002', // Department app (alternative localhost)
+        'http://127.0.0.1:3003', // Admin app (alternative localhost)
+      ];
+
+  // Enable CORS with specific origins for frontend apps
   app.enableCors({
-    origin: '*', // Adjust this to your needs, e.g., specify allowed origins
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    origin: corsOrigins,
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: [
+      'Content-Type', 
+      'Authorization', 
+      'Accept', 
+      'Origin', 
+      'X-Requested-With',
+    ],
     credentials: true,
+    optionsSuccessStatus: 200, // For legacy browser support
   });
 
   // Global validation pipe

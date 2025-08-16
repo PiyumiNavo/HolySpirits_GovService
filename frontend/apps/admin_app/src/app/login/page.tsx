@@ -4,9 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { InputField, Button, Card } from "@myorg/ui";
 import { LockClosedIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
+import { useAuth } from "../../hooks/useAuth";
+import type { ApiError } from "../../types/api.types";
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const { login, isLoading: authLoading } = useAuth();
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -62,6 +65,19 @@ export default function AdminLoginPage() {
     
     setIsLoading(true);
     
+    try {
+      await login(credentials.email, credentials.password);
+      // Successful login will be handled by the auth context
+      router.push("/departments");
+    } catch (error) {
+      const apiError = error as ApiError;
+      setErrors(prev => ({
+        ...prev,
+        form: apiError.message || "Login failed. Please try again.",
+      }));
+    } finally {
+      setIsLoading(false);
+    }
     router.push("/departments");
     
     // try {
@@ -167,8 +183,8 @@ export default function AdminLoginPage() {
             variant="primary"
             size="lg"
             className="w-full mt-6"
-            loading={isLoading}
-            disabled={isLoading}
+            loading={isLoading || authLoading}
+            disabled={isLoading || authLoading}
           >
             {isLoading ? "Signing in..." : "Sign in"}
           </Button>
