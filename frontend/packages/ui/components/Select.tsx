@@ -32,7 +32,7 @@ export default function Select({
 }: SelectProps) {
   return (
     <div className={className}>
-      <label htmlFor={id} className="block text-sm font-medium text-text-700 mb-2">
+      <label htmlFor={id} className="block text-xs font-medium text-text-700 mb-1">
         {label}
         {required && <span className="text-error-500 ml-1">*</span>}
       </label>
@@ -41,7 +41,7 @@ export default function Select({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className={`
-          w-full px-3 py-2 border rounded-md shadow-sm 
+          w-full px-2.5 py-1.5 text-sm border rounded-md shadow-sm 
           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500
           ${error ? 'border-error-500' : 'border-border-200'}
         `}
@@ -54,7 +54,7 @@ export default function Select({
           </option>
         ))}
       </select>
-      {error && <p className="mt-1 text-sm text-error-500">{error}</p>}
+      {error && <p className="mt-0.5 text-xs text-error-500">{error}</p>}
     </div>
   );
 }

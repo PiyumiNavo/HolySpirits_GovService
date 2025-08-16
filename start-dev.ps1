@@ -8,7 +8,7 @@ Write-Host ""
 
 # Start all services
 Write-Host "Starting all services..." -ForegroundColor Green
-docker-compose up -d
+docker-compose -f docker-compose.yml up -d
 
 Write-Host ""
 Write-Host "Services are starting. You can access them at:" -ForegroundColor Green
