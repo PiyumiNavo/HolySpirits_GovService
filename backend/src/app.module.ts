@@ -6,12 +6,15 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DepartmentsModule } from './departments/departments.module';
+import { LocationsModule } from './locations/locations.module';
 import { GovServicesModule } from './gov-services/gov-services.module';
 import { FilesModule } from './files/files.module';
 import { MailModule } from './mail/mail.module';
 import { SchedulerModule } from './scheduler/scheduler.module';
+import { SubmissionsModule } from './submissions/submissions.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtGuard } from './common/guards/jwt/jwt.guard';
+import { SeederModule } from './seeder/seeder.module';
 
 @Module({
   imports: [
@@ -28,10 +31,13 @@ import { JwtGuard } from './common/guards/jwt/jwt.guard';
     AuthModule,
     UsersModule,
     DepartmentsModule,
+    LocationsModule,
     GovServicesModule,
     FilesModule,
     MailModule,
     SchedulerModule,
+    SubmissionsModule,
+    SeederModule,
   ],
   controllers: [AppController],
   providers: [
