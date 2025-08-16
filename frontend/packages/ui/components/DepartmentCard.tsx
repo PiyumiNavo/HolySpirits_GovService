@@ -7,6 +7,7 @@ interface DepartmentCardProps {
   icon?: React.ReactNode;
   serviceID?: Number;
   imageUrl?: string;
+  customUrl?: string;
 }
 
 export default function DepartmentCard({
@@ -14,18 +15,23 @@ export default function DepartmentCard({
   icon = <DefaultIcon />,
   serviceID,
   imageUrl,
+  customUrl,
   }: DepartmentCardProps) {
 
     const router = useRouter();
 
     const navigateToService = () => {
-      router.push(`/services/${serviceID}`);
+      if (customUrl) {
+        router.push(customUrl);
+      } else {
+        router.push(`/services/${serviceID}`);
+      }
     };
 
     return (
       <button 
         onClick={navigateToService}
-        className="block w-full hover:no-underline text-left"
+        className="block w-full hover:no-underline text-left cursor-pointer"
       >
         <div className="flex items-center bg-primary-500 gap-2 p-2 w-full rounded-[100px]">
           {/* Circle with icon */}

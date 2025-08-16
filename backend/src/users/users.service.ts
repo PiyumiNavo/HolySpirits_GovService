@@ -34,9 +34,83 @@ export class UsersService {
     // Create new user
     const newUser = new this.userModel({
       ...createUserDto,
-      password: hashedPassword,
+      password: hashedPassword, // Store hashed password
     });
 
     return newUser.save();
+  }
+
+  async addVerificationDocument(
+    userId: Types.ObjectId,
+    documentData: any,
+  ): Promise<UserDocument | null> {
+    return this.userModel
+      .findByIdAndUpdate(
+        userId,
+        {
+          $push: { verificationDocuments: documentData },
+        },
+        { new: true },
+      )
+      .exec();
+  }
+
+  async verifyUser(
+    userId: Types.ObjectId,
+    verifiedBy: Types.ObjectId,
+  ): Promise<UserDocument | null> {
+    return this.userModel
+      .findByIdAndUpdate(
+        userId,
+        {
+          isVerified: true,
+          verificationDate: new Date(),
+          verifiedBy,
+        },
+        { new: true },
+      )
+      .exec();
+  }
+
+  async verifyDocument(
+    userId: Types.ObjectId,
+    documentId: Types.ObjectId,
+    verifiedBy: Types.ObjectId,
+  ): Promise<UserDocument | null> {
+    return this.userModel
+      .findOneAndUpdate(
+        {
+          _id: userId,
+          'verificationDocuments._id': documentId,
+        },
+        {
+          $set: {
+            'verificationDocuments.$.verified': true,
+            'verificationDocuments.$.verificationDate': new Date(),
+            'verificationDocuments.$.verifiedBy': verifiedBy,
+          },
+        },
+        { new: true },
+      )
+      .exec();
+  }
+
+  async updateNotificationPreferences(
+    userId: Types.ObjectId,
+    preferences: { email?: boolean; sms?: boolean },
+  ): Promise<UserDocument | null> {
+    const updateData: Record<string, boolean> = {};
+
+    if (preferences.email !== undefined) {
+      updateData['notificationPreferences.email'] = preferences.email;
+    }
+
+    if (preferences.sms !== undefined) {
+      updateData['notificationPreferences.sms'] = preferences.sms;
+    }
+
+    return this.userModel
+      .findByIdAndUpdate(userId, { $set: updateData }, { new: true })
+      .exec();
   }
 }

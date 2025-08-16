@@ -15,7 +15,6 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { type RequestWithUser } from './interfaces/request-with-user.interface';
 import { Public } from '../common/decorators/public.decorator';
-import { type UserDocument } from 'src/users/schemas/user.schema';
 import {
   ApiBearerAuth,
   ApiTags,
@@ -41,10 +40,8 @@ export class AuthController {
     type: UserResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
-  async signup(@Body() createUserDto: CreateUserDto): Promise<UserDocument> {
-    const user = await this.authService.signup(createUserDto);
-
-    return user;
+  async signup(@Body() createUserDto: CreateUserDto) {
+    return this.authService.signup(createUserDto);
   }
 
   @Public()
@@ -74,8 +71,12 @@ export class AuthController {
     type: UserResponseDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  getProfile(@Req() req: RequestWithUser): UserDocument {
-    return req.user as UserDocument;
+  getProfile(@Req() req: RequestWithUser) {
+    return {
+      status: HttpStatus.OK,
+      message: 'Profile retrieved successfully',
+      data: req.user,
+    };
   }
 
   // This endpoint is protected with JWT and returns the current user
@@ -89,8 +90,12 @@ export class AuthController {
     type: UserResponseDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  getMe(@Req() req: RequestWithUser): UserDocument {
-    return req.user as UserDocument;
+  getMe(@Req() req: RequestWithUser) {
+    return {
+      status: HttpStatus.OK,
+      message: 'User information retrieved successfully',
+      data: req.user,
+    };
   }
 
   // For session based auth, we would implement logout
@@ -104,6 +109,10 @@ export class AuthController {
     description: 'User successfully logged out',
   })
   logout() {
-    return { message: 'Logout successful' };
+    return {
+      status: HttpStatus.OK,
+      message: 'Logout successful',
+      data: null,
+    };
   }
 }
