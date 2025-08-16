@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { DepartmentHeader, SearchBar, Button, DepartmentList } from "@myorg/ui";
+import { useAuth } from "../../hooks/useAuth";
+import ProtectedRoute from "../../components/ProtectedRoute";
 
 // Mock data for departments. In real app, fetch from API.
 const departments = [
@@ -28,32 +30,46 @@ const departments = [
 
 export default function DepartmentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const { user, logout } = useAuth();
 
   // Filter departments based on search query
   const filteredDepartments = departments.filter((dept) =>
     dept.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen gap-16">
-      <DepartmentHeader departmentName="Government Departments" />
+  const handleLogout = () => {
+    logout();
+  };
 
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start container mx-auto px-4">
-        <div className="flex flex-col gap-2 w-full">
-          <SearchBar
-            placeholder="Search for departments..."
-            onSearch={(query) => {
-              setSearchQuery(query);
-            }}
-          />
+  return (
+    <ProtectedRoute>
+      <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen gap-16">
+        <div className="w-full">
+          <DepartmentHeader departmentName={`Welcome, ${user?.name || 'Admin'}`} />
+          <div className="flex justify-end px-4 mt-2">
+            <Button variant="outline" onClick={handleLogout}>
+              Logout
+            </Button>
+          </div>
         </div>
 
-        <Button variant="primary" size="md">
-          Add New Department
-        </Button>
+        <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start container mx-auto px-4">
+          <div className="flex flex-col gap-2 w-full">
+            <SearchBar
+              placeholder="Search for departments..."
+              onSearch={(query) => {
+                setSearchQuery(query);
+              }}
+            />
+          </div>
 
-        <DepartmentList departments={filteredDepartments} />
-      </main>
-    </div>
+          <Button variant="primary" size="md">
+            Add New Department
+          </Button>
+
+          <DepartmentList departments={filteredDepartments} />
+        </main>
+      </div>
+    </ProtectedRoute>
   );
 }

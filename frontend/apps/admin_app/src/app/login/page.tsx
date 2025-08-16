@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { InputField, Button, Card } from "@myorg/ui";
+import { useAuth } from "../../hooks/useAuth";
+import type { ApiError } from "../../types/api.types";
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const { login, isLoading: authLoading } = useAuth();
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -62,27 +65,14 @@ export default function AdminLoginPage() {
     setIsLoading(true);
     
     try {
-      const response = await fetch("/api/admin/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      });
-
-      if (response.ok) {
-        router.push("/departments");
-      } else {
-        const errorData = await response.json();
-        setErrors(prev => ({
-          ...prev,
-          form: errorData.message || "Login failed. Please try again.",
-        }));
-      }
+      await login(credentials.email, credentials.password);
+      // Successful login will be handled by the auth context
+      router.push("/departments");
     } catch (error) {
+      const apiError = error as ApiError;
       setErrors(prev => ({
         ...prev,
-        form: "Network error. Please try again.",
+        form: apiError.message || "Login failed. Please try again.",
       }));
     } finally {
       setIsLoading(false);
@@ -112,7 +102,7 @@ export default function AdminLoginPage() {
             id="email"
             label="Email Address"
             type="email"
-            // name="email"
+            name="email"
             value={credentials.email}
             onChange={handleChange}
             placeholder="admin@example.com"
@@ -124,7 +114,7 @@ export default function AdminLoginPage() {
             id="password"
             label="Password"
             type="password"
-            // name="password"
+            name="password"
             value={credentials.password}
             onChange={handleChange}
             placeholder="••••••••"
@@ -137,8 +127,8 @@ export default function AdminLoginPage() {
             variant="primary"
             size="lg"
             className="w-full mt-6"
-            loading={isLoading}
-            disabled={isLoading}
+            loading={isLoading || authLoading}
+            disabled={isLoading || authLoading}
           >
             {isLoading ? "Signing in..." : "Sign in"}
           </Button>
