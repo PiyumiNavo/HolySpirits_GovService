@@ -1,5 +1,7 @@
 "use client"
 
+import React from 'react';
+
 import { useState } from "react";
 import {Button, DepartmentCard, Header, SearchBar, BlurredDiv, BranchCard} from "@myorg/ui";
 import Image from "next/image"
@@ -86,11 +88,13 @@ const initbranches = [
   }
 ];
 interface ServicePageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default function ServicePage({ params }: ServicePageProps) {
-  const serviceId = params.id;
+  const unwrappedParams = React.use(params);
+  const serviceId = unwrappedParams.id;
+  
   const title = "Registration of Motor Bikes";
   const imageUrl = "/bicycle.jpg";
 
@@ -164,9 +168,7 @@ export default function ServicePage({ params }: ServicePageProps) {
                       className="absolute flex justify-between items-center bottom-0 bg-primary-500/70 left-0 right-0 p-6 backdrop-blur-md"
                     >
                       <h1 className="text-base sm:text-2xl font-semibold text-primary-600 w-full">{title}</h1>
-                      <div className="w-2/5">
-                        <Button>Expand to Another Branch</Button>
-                      </div>
+                     
                     </div>
                 </div>
 
