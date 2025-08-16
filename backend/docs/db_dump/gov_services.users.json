@@ -1,0 +1,58 @@
+[{
+  "_id": {
+    "$oid": "689e4b096cc9036220d88081"
+  },
+  "email": "test@lk.lk",
+  "password": "$2b$10$VEKXrRKUf/omfeBb8hC4rOMTVrkngmTqpPSX7ye0yv.Mh05zICeR6",
+  "role": "citizen",
+  "departmentId": null,
+  "createdAt": {
+    "$date": "2025-08-14T20:46:01.880Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-14T20:46:01.880Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "689e4f615ab4c3d602258cb7"
+  },
+  "email": "user@example.com",
+  "password": "$2b$10$9MNpK.AugKNRMJsmNpr.u.SMW6CbRNU.zs2CwV5U.dHvZZL.FKuMm",
+  "role": "citizen",
+  "departmentId": "6507f6b72a1f8b9a2c3d4e5f",
+  "createdAt": {
+    "$date": "2025-08-14T21:04:33.822Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-14T21:04:33.822Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68a038a3e879b4f0ffafe673"
+  },
+  "name": "System Administrator",
+  "email": "admin@egov.lk",
+  "password": "$2b$10$pPwPo7bHVIAQcCEfuam16OtTXzJCkUm/EBFgChKg4fz5H/fvpS1TK",
+  "role": "system_admin",
+  "isVerified": true,
+  "assignedServices": [],
+  "notificationPreferences": {
+    "email": true,
+    "sms": false,
+    "_id": {
+      "$oid": "68a038a3e879b4f0ffafe674"
+    }
+  },
+  "verificationDocuments": [],
+  "createdAt": {
+    "$date": "2025-08-16T07:52:03.460Z"
+  },
+  "updatedAt": {
+    "$date": "2025-08-16T07:52:03.460Z"
+  },
+  "__v": 0
+}]
