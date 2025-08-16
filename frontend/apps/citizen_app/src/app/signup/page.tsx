@@ -6,6 +6,7 @@ import { FormDiv, Button, InputField } from "@myorg/ui";
 
 export default function SigninPage() {
   const [nic, setNic] = useState("");
+  const [nicImage, setNicImage] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -16,7 +17,7 @@ export default function SigninPage() {
       alert("Passwords do not match!");
       return;
     }
-    console.log("Signin:", { nic, password });
+    console.log("Signup:", { nic, nicImage, password });
   };
 
   return (
@@ -45,11 +46,20 @@ export default function SigninPage() {
                 {[
                   {
                     id: "nic",
-                    label: "NIC",
+                    label: "NIC number",
                     type: "text",
                     value: nic,
                     onChange: (e: React.ChangeEvent<HTMLInputElement>) => setNic(e.target.value),
-                    placeholder: "Enter your NIC",
+                    placeholder: "Enter your NIC number",
+                    required: true
+                  },
+                  {
+                    id: "nicImage",
+                    label: "Image of NIC",
+                    type: "file",
+                    value: nicImage,
+                    onChange: (e: React.ChangeEvent<HTMLInputElement>) => setNicImage(e.target.value),
+                    placeholder: "Upload your NIC image",
                     required: true
                   },
                   {
@@ -85,7 +95,7 @@ export default function SigninPage() {
                 
                 <div className="pt-4">
                   <Link href="/government-departments" passHref>
-                    <Button>
+                    <Button className="w-full">
                       Sign Up
                     </Button>
                   </Link>
