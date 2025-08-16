@@ -18,8 +18,9 @@ export class DepartmentsService extends BaseService {
     super();
   }
 
-  async findAll(): Promise<DepartmentDocument[]> {
-    return this.departmentModel.find().exec();
+  async findAll() {
+    const departments = await this.departmentModel.find().exec();
+    return this.success(departments, 'Departments retrieved successfully');
   }
 
   async findById(id: Types.ObjectId | string): Promise<DepartmentDocument> {
@@ -32,6 +33,11 @@ export class DepartmentsService extends BaseService {
     return department;
   }
 
+  async getDepartmentById(id: Types.ObjectId | string) {
+    const department = await this.findById(id);
+    return this.success(department, 'Department retrieved successfully');
+  }
+
   async findByName(name: string): Promise<DepartmentDocument | null> {
     return this.departmentModel.findOne({ name }).exec();
   }
@@ -39,7 +45,7 @@ export class DepartmentsService extends BaseService {
   async create(
     createDepartmentDto: CreateDepartmentDto,
     createdByUserId: Types.ObjectId | string,
-  ): Promise<DepartmentDocument> {
+  ) {
     // Check if department name already exists
     const existingDepartment = await this.findByName(createDepartmentDto.name);
     if (existingDepartment) {
@@ -61,13 +67,14 @@ export class DepartmentsService extends BaseService {
       createdBy: createdByUserId,
     });
 
-    return newDepartment.save();
+    const department = await newDepartment.save();
+    return this.success(department, 'Department created successfully');
   }
 
   async update(
     id: Types.ObjectId | string,
     updateData: Partial<CreateDepartmentDto>,
-  ): Promise<DepartmentDocument> {
+  ) {
     // Check if department exists
     const department = await this.findById(id);
 
@@ -94,10 +101,10 @@ export class DepartmentsService extends BaseService {
       .findByIdAndUpdate(id, updateData, { new: true })
       .exec();
 
-    return updatedDepartment!;
+    return this.success(updatedDepartment!, 'Department updated successfully');
   }
 
-  async delete(id: Types.ObjectId | string): Promise<DepartmentDocument> {
+  async delete(id: Types.ObjectId | string) {
     const deletedDepartment = await this.departmentModel
       .findByIdAndDelete(id)
       .exec();
@@ -108,6 +115,6 @@ export class DepartmentsService extends BaseService {
       );
     }
 
-    return deletedDepartment;
+    return this.success(deletedDepartment, 'Department deleted successfully');
   }
 }
