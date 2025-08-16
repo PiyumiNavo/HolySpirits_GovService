@@ -103,8 +103,8 @@ export default function GovernmentDepartments() {
                 borderTopLeftRadius: '50px',
                 borderTopRightRadius: '50px',
                 backdropFilter: 'blur(10px)',
-                height: 'calc(100vh - 120px)',
-                marginTop: '120px',
+                height: 'calc(100vh - 80px)',
+                marginTop: '80px',
                 overflowY: 'auto'
               }}
             >
@@ -127,7 +127,7 @@ export default function GovernmentDepartments() {
                 <div className="flex justify-center py-4">
                   <button 
                     onClick={handleShowMore}
-                    className="flex flex-col items-center gap-0.5 text-white hover:text-gray-200 transition-colors"
+                    className="flex flex-col items-center  gap-0.5 text-white hover:text-gray-200 transition-colors"
                   >
                     <span className="text-sm font-medium">Show Less</span>
                     <svg 
